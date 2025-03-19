@@ -6,6 +6,8 @@ app = Flask(__name__)
 
 # Define Payment class
 
+# Define Item class
+
 # Define Order class
 # An order is expected to have:
 # one or many items, shipping information, payment information
