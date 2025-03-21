@@ -1,3 +1,6 @@
+
+
+
 from flask import Flask
 
 app = Flask(__name__)
@@ -12,7 +15,6 @@ app = Flask(__name__)
 # An order is expected to have:
 # one or many items, shipping information, payment information
 
-
 @app.route('/')
 def hello_world():  # put application's code here
     return 'Hello World!'
@@ -23,7 +25,7 @@ def place_order():
 
 
 
-# this is my code for the submition c:
+
 
 if __name__ == '__main__':
     app.run()
