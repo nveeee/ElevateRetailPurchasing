@@ -1,0 +1,49 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+.venv/
+.env/
+
+# Cursor rules
+.cursor/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Logs and cache
+*.log
+*.cache/
+
+# IDE and editor settings
+.vscode/
+.idea/
+*.swp
+
+# Python environment variables
+.env
+*.env
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# MyPy
+.mypy_cache/
+
+# Docker
+*.pid
+
+# Other
+*.bak
+.DS_Store
+Thumbs.db
