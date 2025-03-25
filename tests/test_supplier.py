@@ -1,6 +1,8 @@
 import pytest
 from marshmallow import ValidationError
 from app.schemas.supplier import Supplier, SupplierSchema
+import json
+from unittest.mock import patch
 
 class TestSupplierClass:
     @pytest.fixture
@@ -76,4 +78,112 @@ class TestSupplierSchema:
         invalid_data["contact_info"] = "a" * 256
         with pytest.raises(ValidationError) as exc:
             schema.load(invalid_data)
-        assert "Longer than maximum length" in str(exc.value) 
+        assert "Longer than maximum length" in str(exc.value)
+
+class TestSupplierEndpoint:
+    @pytest.fixture
+    def client(self):
+        from app import create_app
+        app = create_app()
+        app.config['TESTING'] = True
+        with app.test_client() as client:
+            yield client
+
+    @pytest.fixture
+    def valid_supplier_data(self):
+        return {
+            "supplier_id": 503,
+            "supplier_name": "Test Supplier",
+            "contact_info": "test@example.com"
+        }
+
+    def test_successful_supplier_creation(self, client, valid_supplier_data):
+        response = client.post(
+            '/api/create_supplier',
+            data=json.dumps(valid_supplier_data),
+            content_type='application/json'
+        )
+        
+        assert response.status_code == 201
+        data = json.loads(response.data)
+        assert data['message'] == 'Supplier created'
+        assert data['supplier']['id'] == 503
+        assert data['supplier']['name'] == "Test Supplier"
+        # Add database assertion here when implemented
+
+    def test_create_supplier_missing_required_fields(self, client, valid_supplier_data):
+        test_cases = [
+            ({'supplier_name': 'Missing ID', 'contact_info': 'test@test.com'}, 'supplier_id'),
+            ({'supplier_id': 504, 'contact_info': 'test@test.com'}, 'supplier_name'),
+            ({'supplier_id': 505, 'supplier_name': 'Missing Contact'}, 'contact_info')
+        ]
+        
+        for data, missing_field in test_cases:
+            response = client.post(
+                '/api/create_supplier',
+                data=json.dumps(data),
+                content_type='application/json'
+            )
+            assert response.status_code == 400
+            errors = json.loads(response.data)['errors']
+            assert missing_field in errors
+            assert 'Missing data for required field' in errors[missing_field][0]
+
+    def test_create_supplier_invalid_data_types(self, client, valid_supplier_data):
+        invalid_data = valid_supplier_data.copy()
+        invalid_data['supplier_id'] = "not-an-integer"
+        
+        response = client.post(
+            '/api/create_supplier',
+            data=json.dumps(invalid_data),
+            content_type='application/json'
+        )
+        
+        assert response.status_code == 400
+        errors = json.loads(response.data)['errors']
+        assert 'supplier_id' in errors
+        assert 'Not a valid integer' in errors['supplier_id'][0]
+
+    def test_create_supplier_length_validations(self, client, valid_supplier_data):
+        # Test empty supplier_name
+        invalid_data = valid_supplier_data.copy()
+        invalid_data['supplier_name'] = ""
+        
+        response = client.post(
+            '/api/create_supplier',
+            data=json.dumps(invalid_data),
+            content_type='application/json'
+        )
+        assert response.status_code == 400
+        errors = json.loads(response.data)['errors']
+        assert 'supplier_name' in errors
+        assert 'Length must be between' in errors['supplier_name'][0]
+
+        # Test long contact_info
+        invalid_data = valid_supplier_data.copy()
+        invalid_data['contact_info'] = 'a' * 256
+        
+        response = client.post(
+            '/api/create_supplier',
+            data=json.dumps(invalid_data),
+            content_type='application/json'
+        )
+        assert response.status_code == 400
+        errors = json.loads(response.data)['errors']
+        assert 'contact_info' in errors
+        assert 'Longer than maximum length' in errors['contact_info'][0]
+
+    def test_server_error_handling(self, client, valid_supplier_data):
+        with patch('app.api.routes.SupplierSchema.load') as mock_load:
+            mock_load.side_effect = Exception('DB error')
+            
+            response = client.post(
+                '/api/create_supplier',
+                data=json.dumps(valid_supplier_data),
+                content_type='application/json'
+            )
+            
+            assert response.status_code == 500
+            data = json.loads(response.data)
+            assert 'error' in data
+            assert 'DB error' in data['error'] 
