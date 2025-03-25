@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, post_load
+from marshmallow import Schema, fields, post_load, validates, ValidationError
 
 
 class PurchaseOrderLine:
@@ -18,6 +18,20 @@ class PurchaseOrderLineSchema(Schema):
     unit_price = fields.Float(required=True)
     unit_total = fields.Float(required=True)
 
+    @validates("quantity")
+    def validate_quantity(self, value):
+        if value <= 0:
+            raise ValidationError("Quantity must be greater than 0")
+
+    @validates("unit_price")
+    def validate_unit_price(self, value):
+        if value <= 0:
+            raise ValidationError("Unit price must be greater than 0")
+
+    @validates("unit_total")
+    def validate_unit_total(self, value):
+        if value <= 0:
+            raise ValidationError("Unit total must be greater than 0")
 
     @post_load
     def make_purchase_order_line(self, data, **kwargs):

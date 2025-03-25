@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, post_load
+from marshmallow import Schema, fields, post_load, validates, ValidationError
 from enum import Enum
 
 class PaymentTerms(Enum):
@@ -26,9 +26,26 @@ class PurchaseOrderSchema(Schema):
     purchase_order_id = fields.Int(required=True)
     order_date = fields.Date(required=True)
     total_amount = fields.Float(required=True)
-    payment_terms = fields.Str(required=True, validate=lambda x: x in [e.value for e in PaymentTerms])
+    payment_terms = fields.Str(required=True)
     supplier_id = fields.Int(required=True)
-    status = fields.Str(required=True, validate=lambda x: x in [e.value for e in Status])
+    status = fields.Str(required=True)
+
+    @validates("payment_terms")
+    def validate_payment_terms(self, value):
+        valid_terms = [e.value for e in PaymentTerms]
+        if value not in valid_terms:
+            raise ValidationError(f"Invalid payment terms. Valid options are: {', '.join(valid_terms)}")
+
+    @validates("status")
+    def validate_status(self, value):
+        valid_statuses = [e.value for e in Status]
+        if value not in valid_statuses:
+            raise ValidationError(f"Invalid status. Valid options are: {', '.join(valid_statuses)}")
+
+    @validates("total_amount")
+    def validate_total_amount(self, value):
+        if value < 0:
+            raise ValidationError("Must be greater than or equal to 0")
 
     @post_load
     def make_purchase_order(self, data, **kwargs):

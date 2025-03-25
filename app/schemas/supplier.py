@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, post_load
+from marshmallow import Schema, fields, post_load, validate, ValidationError
 
 class Supplier:
     def __init__(self, supplier_id, supplier_name, contact_info):
@@ -8,8 +8,8 @@ class Supplier:
 
 class SupplierSchema(Schema):
     supplier_id = fields.Int(required=True)
-    supplier_name = fields.Str(required=True)
-    contact_info = fields.Str(required=True)
+    supplier_name = fields.Str(required=True, validate=validate.Length(min=1, max=100))
+    contact_info = fields.Str(required=True, validate=validate.Length(max=255))
 
     @post_load
     def make_supplier(self, data, **kwargs):
