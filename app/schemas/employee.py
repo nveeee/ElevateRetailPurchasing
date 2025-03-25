@@ -5,17 +5,12 @@ import bcrypt
 import uuid
 
 class Employee:
-    employee_db: ClassVar[dict] = {} #simulated in- memory user store, I hope it works.
-
-#  the id is automatically generated.
-
     def __init__(self, first_name, last_name, email, password: str):
-        self.employee_id = str(uuid.uuid4())
+        # Database will handle auto-incrementing ID, don't set it here
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
         self.password_hash = self._hash_password(password)
-        Employee.employee_db[self.employee_id] = self
 
     @staticmethod
     def _hash_password(password: str) -> bytes:
@@ -24,13 +19,14 @@ class Employee:
     def verify_password(self, password: str) -> bool:
         return bcrypt.checkpw(password.encode("utf-8"), self.password_hash)
 
-    @classmethod
-    def get_employee_by_id(cls, employee_id: str) -> "Employee":
-        return cls.employee_db.get(employee_id)
+    # TODO: Implement get_employee_by_id with real database
+    # @classmethod
+    # def get_employee_by_id(cls, employee_id: str) -> "Employee":
+    #     return cls.employee_db.get(employee_id)
 
 
 class EmployeeSchema(Schema):
-    employee_id = fields.UUID(required=False, dump_only=True)
+    employee_id = fields.Int(required=False, dump_only=True)
     first_name = fields.Str(required=True)
     last_name = fields.Str(required=True)
     email = fields.Email(required=True)
