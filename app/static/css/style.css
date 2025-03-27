@@ -1,9 +1,100 @@
-body {
+
+{
     font-family: Arial, sans-serif;
-    margin: 2em;
-    background-color: #f9f9f9;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
 }
 
-h1 {
-    color: #333;
+header {
+    background-color: #007bff; /* Blue color for header */
+    color: white;
+    padding: 20px 20px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+.header-links {
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px 20px;
+}
+
+.header-links a {
+    color: #007bff;
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 18px;
+}
+
+.header-links a:hover {
+    text-decoration: underline;
+}
+
+.container {
+    margin: 20px;
+}
+
+.product-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.product {
+    background-color: white;
+    width: 200px;
+    padding: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.product img {
+    width: 100%;
+    height: auto;
+}
+
+.product button {
+    background-color: #28a745; /* Green button for add to cart */
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.product button:hover {
+    background-color: #218838;
+}
+
+.login-container {
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.login-container input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.login-container button {
+    background-color: #007bff; /* Blue button for login */
+    color: white;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.login-container button:hover {
+    background-color: #0056b3;
 }

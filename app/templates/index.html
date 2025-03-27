@@ -1,18 +1,57 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Elevate Retail Purchasing </title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <style>
-        body {
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elevate Retail Purchasing</title>
+     <link rel="stylesheet" type="text/css" href="../static/css/style.css">
 
-        }
-
-    </style>
 </head>
 <body>
-    <h1>Welcome to the Flask App</h1>
-    <p>This is the front-end view.</p>
+
+<header>
+    <h1>Elevate Retail Purchasing</h1>
+</header>
+
+<div class="header-links">
+    <!-- Static Content for Login and Cart (Replace with Static Content) -->
+    <a href="/login" id="login-link">Login</a>  <!-- Hardcoded Login Link -->
+    <a href="/cart" id="cart-link">Cart (0)</a>  <!-- Static cart count of 0 -->
+</div>
+
+<div class="container">
+    <div class="product-list">
+        <div class="product">
+            <img src="https://via.placeholder.com/150" alt="Product 1">
+            <h4>Product 1</h4>
+            <p>$10.00</p>
+            <form action="/add_to_cart" method="POST">
+                <input type="hidden" name="product_name" value="Product 1">
+                <button type="submit">Add to Cart</button>
+            </form>
+        </div>
+        <div class="product">
+            <img src="https://via.placeholder.com/150" alt="Product 2">
+            <h4>Product 2</h4>
+            <p>$15.00</p>
+            <form action="/add_to_cart" method="POST">
+                <input type="hidden" name="product_name" value="Product 2">
+                <button type="submit">Add to Cart</button>
+            </form>
+        </div>
+        <div class="product">
+            <img src="https://via.placeholder.com/150" alt="Product 3">
+            <h4>Product 3</h4>
+            <p>$20.00</p>
+            <form action="/add_to_cart" method="POST">
+                <input type="hidden" name="product_name" value="Product 3">
+                <button type="submit">Add to Cart</button>
+            </form>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
+
