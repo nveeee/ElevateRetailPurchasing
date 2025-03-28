@@ -1,6 +1,10 @@
 import pytest
 from marshmallow import ValidationError
-from app.schemas.supplier import Supplier, SupplierSchema
+from app.schemas.supplier import (
+    Supplier,
+    SupplierSchema,
+    PaymentTerms
+)
 import json
 from unittest.mock import patch
 
@@ -10,7 +14,8 @@ class TestSupplierClass:
         return {
             "supplier_id": 501,
             "supplier_name": "Acme Corp",
-            "contact_info": "contact@acme.com"
+            "contact_info": "contact@acme.com",
+            "payment_terms": PaymentTerms.NET_30.value
         }
 
     def test_supplier_creation(self, valid_supplier_data):
@@ -19,6 +24,7 @@ class TestSupplierClass:
         assert supplier.supplier_id == 501
         assert supplier.supplier_name == "Acme Corp"
         assert supplier.contact_info == "contact@acme.com"
+        assert supplier.payment_terms == PaymentTerms.NET_30.value
 
 class TestSupplierSchema:
     @pytest.fixture
@@ -30,7 +36,8 @@ class TestSupplierSchema:
         return {
             "supplier_id": 502,
             "supplier_name": "Global Supplies",
-            "contact_info": "support@globalsupplies.com"
+            "contact_info": "support@globalsupplies.com",
+            "payment_terms": "NET_60"
         }
 
     def test_valid_data_loading(self, schema, valid_data):
@@ -38,6 +45,14 @@ class TestSupplierSchema:
         assert isinstance(supplier, Supplier)
         assert supplier.supplier_id == 502
         assert supplier.contact_info == "support@globalsupplies.com"
+
+    def test_invalid_payment_terms(self, schema, valid_data):
+        invalid_data = valid_data.copy()
+        invalid_data["payment_terms"] = "INVALID_TERM"
+
+        with pytest.raises(ValidationError) as exc:
+            schema.load(invalid_data)
+        assert "Invalid payment terms" in str(exc.value)
 
     def test_missing_required_fields(self, schema):
         incomplete_data = {
@@ -49,6 +64,7 @@ class TestSupplierSchema:
         errors = exc.value.messages
         assert "supplier_id" in errors
         assert "contact_info" in errors
+        assert "payment_terms" in errors
 
     def test_data_types_validation(self, schema, valid_data):
         # Test invalid supplier_id type
