@@ -3,7 +3,9 @@ from datetime import date
 from marshmallow import ValidationError
 from app.schemas.purchase_order import (
     PurchaseOrder,
-    PurchaseOrderSchema,
+    PurchaseOrderSchema
+)
+from app.schemas.enums import (
     PaymentTerms,
     Status
 )
@@ -12,18 +14,24 @@ class TestPurchaseOrderClass:
     @pytest.fixture
     def valid_po_data(self):
         return {
-            "purchase_order_id": 1001,
             "order_date": date(2023, 1, 15),
             "total_amount": 1500.00,
             "payment_terms": PaymentTerms.NET_30.value,
             "supplier_id": 501,
-            "status": Status.PENDING.value
+            "status": Status.PENDING.value,
+            "line_items": [
+                {
+                    "product_id": 1,
+                    "quantity": 2,
+                    "unit_price": 500.00,
+                    "unit_total": 1000.00
+                }
+            ]
         }
 
     def test_purchase_order_creation(self, valid_po_data):
         po = PurchaseOrder(**valid_po_data)
-        
-        assert po.purchase_order_id == 1001
+
         assert po.order_date == date(2023, 1, 15)
         assert po.total_amount == 1500.00
         assert po.payment_terms == PaymentTerms.NET_30.value
@@ -38,18 +46,24 @@ class TestPurchaseOrderSchema:
     @pytest.fixture
     def valid_data(self):
         return {
-            "purchase_order_id": 1002,
             "order_date": "2023-01-20",
             "total_amount": 2000.50,
             "payment_terms": "NET_60",
             "supplier_id": 502,
-            "status": "APPROVED"
+            "status": "APPROVED",
+            "line_items": [
+                {
+                    "product_id": 1,
+                    "quantity": 2,
+                    "unit_price": 500.00,
+                    "unit_total": 1000.00
+                }
+            ]
         }
 
     def test_valid_data_loading(self, schema, valid_data):
         po = schema.load(valid_data)
         assert isinstance(po, PurchaseOrder)
-        assert po.purchase_order_id == 1002
         assert po.order_date == date(2023, 1, 20)
         assert po.total_amount == 2000.50
 
@@ -78,7 +92,6 @@ class TestPurchaseOrderSchema:
         with pytest.raises(ValidationError) as exc:
             schema.load(incomplete_data)
         errors = exc.value.messages
-        assert "purchase_order_id" in errors
         assert "payment_terms" in errors
         assert "supplier_id" in errors
         assert "status" in errors
@@ -86,7 +99,7 @@ class TestPurchaseOrderSchema:
     def test_data_types_validation(self, schema, valid_data):
         # Test invalid ID type
         invalid_data = valid_data.copy()
-        invalid_data["purchase_order_id"] = "invalid_id"
+        invalid_data["supplier_id"] = "invalid_supplier"
         
         with pytest.raises(ValidationError) as exc:
             schema.load(invalid_data)

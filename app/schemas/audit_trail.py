@@ -9,6 +9,13 @@ class AuditTrail:
         self.action = action
         self.timestamp = datetime.now()
 
+    def save_to_db(self):
+        try:
+            # TODO: Implement saving to database
+            # If db record is saved, return the response, else raise error
+            pass
+        except Exception as e:
+            raise e
 
 
 class AuditTrailSchema(Schema):

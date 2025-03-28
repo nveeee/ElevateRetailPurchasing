@@ -1,12 +1,8 @@
 from flask import jsonify
 from marshmallow import Schema, fields, post_load, validate, ValidationError, validates
-from enum import Enum
+from .enums import PaymentTerms
 
-class PaymentTerms(Enum):
-    NET_30 = "NET_30"
-    NET_60 = "NET_60"
-    NET_90 = "NET_90"
-    COD = "COD" # Cash On Delivery
+from app.schemas.purchase_order import PurchaseOrder
 
 class Supplier:
     def __init__(self, supplier_id, supplier_name, contact_info, payment_terms):
@@ -15,13 +11,44 @@ class Supplier:
         self.contact_info = contact_info
         self.payment_terms = payment_terms
 
-    def send_purchase_order(self, purchase_order):
-        # TODO: Implement supplier communication logic
-        print("Sending fake purchase order..")  # Temporary  placeholder
-        return jsonify({
-            'message': "Purchase order sent successfully",
-            'status': 'APPROVED'
-        }), 201
+    def send_purchase_order(self, purchase_order: PurchaseOrder):
+        try:
+            # TODO: Implement supplier communication logic
+            fake_supplier_response = {
+                "order_id": "12345",
+                "status": "APPROVED",
+                "estimated_delivery": "2025-12-31",
+                "message": "Purchase order received and approved."
+            }
+
+            return fake_supplier_response
+        except Exception as e:
+            # TODO: Log the error
+            raise Exception("Error while sending purchase order to supplier") from e
+
+    @classmethod
+    def save_to_db(cls, supplier):
+        try:
+            # TODO: Save supplier to database
+
+            fake_db_response = {
+                "supplier_id": "12345",
+                "supplier_name": "Supplier 1",
+                "contact_info": "1234567890",
+                "payment_terms": "NET_30"
+            }
+
+            return fake_db_response
+        except Exception as e:
+            # TODO: Log the error saving to database
+            raise Exception("Error while saving supplier to database") from e
+
+    @classmethod
+    def get_supplier_by_id(cls, supplier_id):
+        # TODO: Implement the logic to get a supplier instance based on the supplier_id
+        # This is a placeholder and should be replaced with the actual implementation
+        return Supplier(1, 'Supplier 1', '1234567890', "NET30")
+
 
 class SupplierSchema(Schema):
     supplier_id = fields.Int(required=True)

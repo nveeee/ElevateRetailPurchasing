@@ -2,9 +2,9 @@ import pytest
 from marshmallow import ValidationError
 from app.schemas.supplier import (
     Supplier,
-    SupplierSchema,
-    PaymentTerms
+    SupplierSchema
 )
+from app.schemas.enums import PaymentTerms
 import json
 from unittest.mock import patch
 
@@ -110,7 +110,8 @@ class TestSupplierEndpoint:
         return {
             "supplier_id": 503,
             "supplier_name": "Test Supplier",
-            "contact_info": "test@example.com"
+            "contact_info": "test@example.com",
+            "payment_terms": PaymentTerms.NET_30.value
         }
 
     def test_successful_supplier_creation(self, client, valid_supplier_data):
@@ -125,6 +126,7 @@ class TestSupplierEndpoint:
         assert data['message'] == 'Supplier created'
         assert data['supplier']['id'] == 503
         assert data['supplier']['name'] == "Test Supplier"
+        assert data['supplier']['payment_terms'] == 'NET_30'
         # Add database assertion here when implemented
 
     def test_create_supplier_missing_required_fields(self, client, valid_supplier_data):
@@ -190,7 +192,7 @@ class TestSupplierEndpoint:
         assert 'Longer than maximum length' in errors['contact_info'][0]
 
     def test_server_error_handling(self, client, valid_supplier_data):
-        with patch('app.api.routes.SupplierSchema.load') as mock_load:
+        with patch('app.api.routes.supplier.SupplierSchema.load') as mock_load:
             mock_load.side_effect = Exception('DB error')
             
             response = client.post(

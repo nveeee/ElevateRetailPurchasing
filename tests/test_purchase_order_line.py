@@ -6,8 +6,6 @@ class TestPurchaseOrderLineClass:
     @pytest.fixture
     def valid_line_data(self):
         return {
-            "line_id": 1,
-            "purchase_order_id": 1001,
             "product_id": 501,
             "quantity": 10,
             "unit_price": 25.99,
@@ -16,9 +14,7 @@ class TestPurchaseOrderLineClass:
 
     def test_line_creation(self, valid_line_data):
         line = PurchaseOrderLine(**valid_line_data)
-        
-        assert line.line_id == 1
-        assert line.purchase_order_id == 1001
+
         assert line.product_id == 501
         assert line.quantity == 10
         assert line.unit_price == 25.99
@@ -32,8 +28,6 @@ class TestPurchaseOrderLineSchema:
     @pytest.fixture
     def valid_data(self):
         return {
-            "line_id": 2,
-            "purchase_order_id": 1002,
             "product_id": 502,
             "quantity": 5,
             "unit_price": 19.99,
