@@ -28,6 +28,19 @@ class Product:
         except Exception as e:
             raise e
 
+    @classmethod
+    def get_product_by_id(cls, pid):
+        # TODO: Add database connection here
+        fake_product_response = {
+            "product_id": 1,
+            "product_name": "Product 1",
+            "description": "Product description",
+            "unit_price": 100.00,
+            "quantity": 10,
+            "supplier_id": 1
+        }
+        return fake_product_response
+
 
 class ProductSchema(Schema):
     product_id = fields.Int(required=True)

@@ -1,4 +1,4 @@
-from flask import render_template, request, session
+from flask import render_template, request, session, current_app
 from . import bp
 
 def get_fake_products():
