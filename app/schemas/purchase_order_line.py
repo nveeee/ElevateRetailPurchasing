@@ -2,13 +2,15 @@ from marshmallow import Schema, fields, post_load, validates, ValidationError
 
 
 class PurchaseOrderLine:
-    def __init__(self, product_id, quantity, unit_price, unit_total):
+    def __init__(self, product_id, quantity, unit_price, unit_total, purchase_order_id=None):
         self.product_id = product_id
+        self.purchase_order_id = purchase_order_id
         self.quantity = quantity
         self.unit_price = unit_price
         self.unit_total = unit_total
 
 class PurchaseOrderLineSchema(Schema):
+    purchase_order_id = fields.Int(dump_only=True)
     product_id = fields.Int(required=True)
     quantity = fields.Int(required=True)
     unit_price = fields.Float(required=True)

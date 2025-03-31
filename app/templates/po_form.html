@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Purchase Order - {{ super() }}{% endblock %}
+
+{% block content %}
+<main>
+    <div class="form-container">
+        <h2 class="section-title">Create Purchase Order</h2>
+        {% include '/includes/po_form.html' %}
+    </div>
+</main>
+{% endblock %} 

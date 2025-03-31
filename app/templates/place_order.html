@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Place Order - {{ super() }}{% endblock %}
+
+{% block content %}
+<main>
+    <h2 class="section-title">Available Products</h2>
+    {% include 'includes/order_form.html' %}
+</main>
+
+
+{% endblock %}
+
+{% block head %}
+{{ super() }}
+<style>
+    /* Add place order styles here */
+</style>
+{% endblock %}

@@ -2,7 +2,8 @@ from marshmallow import Schema, fields, post_load, validates, ValidationError
 from .enums import PaymentTerms, Status
 
 class PurchaseOrder:
-    def __init__(self, order_date, total_amount, payment_terms, supplier_id, status, line_items):
+    def __init__(self, order_date, total_amount, payment_terms, supplier_id, status, line_items, purchase_order_id=None):
+        self.purchase_order_id = purchase_order_id
         self.order_date = order_date
         self.total_amount = total_amount
         self.payment_terms = payment_terms
@@ -33,6 +34,7 @@ class PurchaseOrder:
 
 
 class PurchaseOrderSchema(Schema):
+    purchase_order_id = fields.Str(dump_only=True)
     order_date = fields.Date(required=True)
     total_amount = fields.Float(required=True)
     payment_terms = fields.Str(required=True)

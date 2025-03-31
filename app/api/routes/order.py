@@ -10,15 +10,21 @@ from ...schemas.supplier import Supplier
 def place_order():
     try:
         schema = PurchaseOrderSchema()
-        data = request.json
+        data = request.form.to_dict()
+        
+        # Transform form data
+        order_data = transform_order_data(data)
+        print(order_data)  # {'1': {'unit_price': '15.00', 'quantity': '10'}, ...}
 
-        employee_id = data.pop('employee_id', None)
-        purchase_order = schema.load(data)
-
-        if employee_id:
+        if data.get('employee_id'):
             # Create audit trail
-            audit_trail = AuditTrail(employee_id, "Purchase Order Placed")
+            audit_trail = AuditTrail(int(data['employee_id']), "Purchase Order Placed")
             audit_trail.save_to_db()
+
+        # TODO: Create PurchaseOrderLines from data. Query database for product price.
+
+        # TODO: Create PurchaseOrder with newly created line items
+        purchase_order = schema.load(data)
 
         # Get supplier instance
         supplier = Supplier.get_supplier_by_id(purchase_order.supplier_id)
@@ -42,3 +48,31 @@ def place_order():
         }), 201
     except Exception as e:
         return jsonify({'error': str(e)}), 500 
+
+def transform_order_data(form_data):
+    """
+    Transforms form data into a structured dictionary by product ID.
+    
+    Args:
+        form_data (dict): Raw form data with keys like 'unit_price-1', 'quantity-1', etc.
+        
+    Returns:
+        dict: Structured data with product IDs as keys and their details as values
+    """
+    transformed = {}
+    
+    # Find all unique product IDs
+    product_ids = set(
+        key.split('-')[-1] 
+        for key in form_data.keys() 
+        if key.startswith('product_id-')
+    )
+    
+    # Build structured data
+    for pid in product_ids:
+        transformed[pid] = {
+            'unit_price': form_data.get(f'unit_price-{pid}'),
+            'quantity': form_data.get(f'quantity-{pid}')
+        }
+    
+    return transformed 

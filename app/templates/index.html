@@ -1,40 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elevate Retail Purchasing</title>
-     <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+{% extends 'base.html' %}
 
-</head>
-<body>
+{% block title %}Home - {{ super() }}{% endblock %}
 
-<header>
-    <h1>Elevate Retail Purchasing</h1>
-</header>
+{% block content %}
+<main>
+    {% include 'includes/card-grid.html' %}
+    {% include 'includes/alerts-table.html' %}
+</main>
+{% endblock %} 
 
-<div class="header-links">
-    <!-- Static Content for Login and Cart (Replace with Static Content) -->
-    <a href="/login" id="login-link">Login</a>  <!-- Hardcoded Login Link -->
-    <a href="/cart" id="cart-link">Cart (0)</a>  <!-- Static cart count of 0 -->
-</div>
-
-<div class="container">
-    <div class="product-list">
-        {% for product in products %}
-        <div class="product">
-            <img src="https://via.placeholder.com/150" alt="{{ product.product_name }}">
-            <h4>{{ product.product_name }}</h4>
-            <p>${{ product.unit_price }}</p>
-            <form action="/add_to_cart" method="POST">
-                <input type="hidden" name="product_name" value="{{ product.product_name }}">
-                <button type="submit">Add to Cart</button>
-            </form>
-        </div>
-        {% endfor %}
-    </div>
-</div>
-
-</body>
-</html>
-
+{% block head %}
+{{ super() }}
+<style>
+    /* Add home styles here */
+</style>
+{% endblock %}

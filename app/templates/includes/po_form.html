@@ -1,0 +1,22 @@
+<form method="POST" action="{{ url_for('api.place_order') }}">
+    {% for product in products %}
+    <div class="product-order-group">
+        <h3>{{ product.product_name }}</h3>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Unit Price</label>
+                <input type="text" name="unit_price-{{ product.product_id }}" 
+                       value="{{ product.unit_price }}" readonly>
+            </div>
+            <div class="form-group">
+                <label>Order Quantity</label>
+                <input type="number" name="quantity-{{ product.product_id }}"
+                       min="1" required>
+            </div>
+            <input type="hidden" name="product_id-{{ product.product_id }}" value="{{ product.product_id }}">
+        </div>
+    </div>
+    {% endfor %}
+    
+    <button type="submit" class="order-button">Submit All Orders</button>
+</form>

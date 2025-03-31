@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Elevate Retail Purchasing{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+    {% block head %}{% endblock %}
+    {% block scripts %}{% endblock %}
+</head>
+<body>
+    <div class="sidebar">
+        {% include 'includes/header.html' %}
+        {% include 'includes/navbar.html' %}
+    </div>
+
+    <div class="main-content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
+
