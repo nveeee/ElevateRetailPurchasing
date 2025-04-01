@@ -47,3 +47,6 @@ htmlcov/
 *.bak
 .DS_Store
 Thumbs.db
+/repomix.config.json
+/repomix-output.md
+/.repomixignore

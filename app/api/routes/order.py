@@ -1,5 +1,5 @@
 from datetime import date
-from flask import jsonify, request
+from flask import jsonify, request, current_app as app
 
 from .. import bp
 from ...schemas import Status
@@ -13,29 +13,38 @@ from ...schemas.supplier import Supplier
 def place_order():
     try:
         data = request.form.to_dict()
-        
+
         # Transform form data
         order_data = transform_order_data(data)
-        print(order_data)  # {'1': {'unit_price': '15.00', 'quantity': '10'}, ...}
+        app.logger.info(f'Order data received: {order_data}')
 
         if data.get('employee_id'):
             # Create audit trail
             audit_trail = AuditTrail(int(data['employee_id']), "Purchase Order Placed")
             audit_trail.save_to_db()
+            app.logger.info(f'Created audit trail for employee {data['employee_id']}')
 
         suppliers = {}
         create_po_line_items(order_data, suppliers)
 
         purchase_orders = []
         create_purchase_orders(purchase_orders, suppliers)
+        app.logger.info(f'Created {len(purchase_orders)} purchase orders')
 
-        send_purchase_orders(purchase_orders)
-
-        return jsonify({
-            'message': 'Order(s) has been placed'
-        }), 201
+        try:
+            send_purchase_orders(purchase_orders)
+            app.logger.info('Successfully sent all purchase orders to suppliers')
+            
+            return jsonify({
+                'message': 'Order(s) has been placed'
+            }), 201
+        except Exception as e:
+            app.logger.error(f'Error processing order: {str(e)}')
+            return jsonify({'error': str(e)}), 400
+            
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        app.logger.error(f'Error in place_order: {str(e)}')
+        return jsonify({'error': 'Invalid request data'}), 400
 
 
 def send_purchase_orders(purchase_orders):
