@@ -1,4 +1,3 @@
-from flask import jsonify
 from marshmallow import Schema, fields, post_load, validate, ValidationError, validates
 from .enums import PaymentTerms
 
