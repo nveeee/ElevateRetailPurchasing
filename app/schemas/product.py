@@ -2,12 +2,13 @@ from marshmallow import Schema, fields, post_load, validates, ValidationError
 
 
 class Product:
-    def __init__(self, product_id, product_name, description, unit_price, quantity, supplier_id):
+    def __init__(self, product_id, product_name, description, unit_price, quantity, category_id, supplier_id):
         self.product_id = product_id
         self.product_name = product_name
         self.description = description
         self.unit_price = unit_price
         self.quantity = quantity
+        self.category_id = category_id
         self.supplier_id = supplier_id
 
     @classmethod
@@ -21,6 +22,7 @@ class Product:
                 "description": "Product description",
                 "unit_price": 100.00,
                 "quantity": 10,
+                "category_id": 1,
                 "supplier_id": 1
             }
 
@@ -37,6 +39,7 @@ class Product:
             "description": "Product description",
             "unit_price": 100.00,
             "quantity": 10,
+            "category_id": 1,
             "supplier_id": 1
         }
         return fake_product_response

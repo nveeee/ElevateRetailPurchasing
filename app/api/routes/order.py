@@ -3,7 +3,6 @@ from flask import jsonify, request, current_app as app
 
 from .. import bp
 from ...schemas import Status
-from ...schemas.audit_trail import AuditTrail
 from ...schemas.product import Product
 from ...schemas.purchase_order import PurchaseOrder
 from ...schemas.purchase_order_line import PurchaseOrderLine
@@ -17,12 +16,6 @@ def place_order():
         # Transform form data
         order_data = transform_order_data(data)
         app.logger.info(f'Order data received: {order_data}')
-
-        if data.get('employee_id'):
-            # Create audit trail
-            audit_trail = AuditTrail(int(data['employee_id']), "Purchase Order Placed")
-            audit_trail.save_to_db()
-            app.logger.info(f'Created audit trail for employee {data['employee_id']}')
 
         suppliers = {}
         create_po_line_items(order_data, suppliers)

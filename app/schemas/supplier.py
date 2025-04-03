@@ -5,11 +5,13 @@ from .enums import PaymentTerms
 from app.schemas.purchase_order import PurchaseOrder
 
 class Supplier:
-    def __init__(self, supplier_id, supplier_name, contact_info, payment_terms):
+    def __init__(self, supplier_id, supplier_name, contact_name, contact_email, contact_phone, payment_terms=PaymentTerms.NET_30.value):
         self.supplier_id = supplier_id
         self.supplier_name = supplier_name
-        self.contact_info = contact_info
-        self.payment_terms = payment_terms
+        self.contact_name = contact_name
+        self.contact_email = contact_email
+        self.contact_phone = contact_phone
+        self.payment_terms = payment_terms # Potential Addition, Ask Database
 
     def send_purchase_order(self, purchase_order: PurchaseOrder):
         try:
@@ -34,7 +36,9 @@ class Supplier:
             fake_db_response = {
                 "supplier_id": "12345",
                 "supplier_name": "Supplier 1",
-                "contact_info": "1234567890",
+                "contact_name": "aaa@sdkndn",
+                "contact_email": "bbb@sdkndn",
+                "contact_phone": "1234567890",
                 "payment_terms": "NET_30"
             }
 
@@ -53,7 +57,9 @@ class Supplier:
 class SupplierSchema(Schema):
     supplier_id = fields.Int(required=True)
     supplier_name = fields.Str(required=True, validate=validate.Length(min=1, max=100))
-    contact_info = fields.Str(required=True, validate=validate.Length(max=255))
+    contact_name = fields.Str(required=True, validate=validate.Length(max=255))
+    contact_email = fields.Str(required=True, validate=validate.Length(max=255))
+    contact_phone = fields.Str(required=True, validate=validate.Length(max=255))
     payment_terms = fields.Str(required=True, validate=validate.Length(max=255))
 
     @validates("payment_terms")
