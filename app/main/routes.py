@@ -3,12 +3,16 @@ from . import bp
 from ..schemas.product import Product
 from ..schemas.supplier import Supplier
 
-def get_products():
+def get_products(limit=None):
     """Get all products from the database with their supplier names"""
     products = []
     
     # Query all products with their suppliers, sorted by quantity
-    product_list = Product.query.order_by(Product.quantity.asc()).all()
+    query = Product.query.order_by(Product.quantity.asc())
+    if limit is not None:
+        query = query.limit(limit)
+
+    product_list = query.all()
     
     for product in product_list:
         # Get the supplier name for each product
