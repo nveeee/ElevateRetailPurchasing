@@ -15,15 +15,7 @@ def create_supplier():
 
         Supplier.save_to_db(supplier)
 
-        return jsonify({
-            'message': 'Supplier created',
-            'supplier': {
-                'id': supplier.supplier_id,
-                'name': supplier.supplier_name,
-                'contact': supplier.contact_info,
-                'payment_terms': supplier.payment_terms
-            }
-        }), 201
+        # TODO: Redirect to homepage
     except ValidationError as err:
         return jsonify({'errors': err.messages}), 400
     except Exception as e:
