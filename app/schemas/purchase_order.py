@@ -1,49 +1,55 @@
 from marshmallow import Schema, fields, post_load, validates, ValidationError
 from .enums import PaymentTerms, Status
+from app.database import db
+from datetime import datetime
 
-class PurchaseOrder:
-    def __init__(self, order_date, total_amount, payment_terms, supplier_id, status, line_items, purchase_order_id=None):
-        self.purchase_order_id = purchase_order_id
-        self.order_date = order_date
-        self.total_amount = total_amount
-        self.payment_terms = payment_terms
-        self.supplier_id = supplier_id
-        self.status = status
-        self.line_items = line_items
+class PurchaseOrder(db.Model):
+    __tablename__ = 'purchase_orders'
 
+    id = db.Column(db.Integer, primary_key=True)
+    purchase_order_id = db.Column(db.String(20), unique=True, nullable=False)
+    order_date = db.Column(db.Date, nullable=False, default=datetime.utcnow)
+    total_amount = db.Column(db.Float, nullable=False)
+    payment_terms = db.Column(db.String(20), nullable=False, default=PaymentTerms.NET_30.value)
+    supplier_id = db.Column(db.Integer, db.ForeignKey('suppliers.id'), nullable=False)
+    status = db.Column(db.String(20), nullable=False, default=Status.PENDING.value)
+
+    line_items = db.relationship('PurchaseOrderLine', back_populates='purchase_order', cascade='all, delete-orphan')
 
     @classmethod
     def save_to_db(cls, purchase_order):
         try:
-            # TODO: Save purchase order to database
-
-            fake_db_response = {
-                "purchase_order_id": "12345",
-                "order_date": "2025-12-31",
-                "total_amount": 1000.00,
-                "payment_terms": "Net_30",
-                "supplier_id": 1,
-                "status": "APPROVED"
-            }
-
-            return fake_db_response
+            db.session.add(purchase_order)
+            db.session.commit()
+            return purchase_order
         except Exception as e:
+            db.session.rollback()
             # TODO: Log the error saving to database
             # Do NOT raise error. Purchase Order was successfully placed.
             pass
 
 
 class PurchaseOrderSchema(Schema):
+    id = fields.Int(dump_only=True)
     purchase_order_id = fields.Str(dump_only=True)
     order_date = fields.Date(required=True)
+    total_amount = fields.Float(required=True)
+    payment_terms = fields.Str(required=True)
     supplier_id = fields.Int(required=True)
     status = fields.Str(required=True)
+    line_items = fields.List(fields.Nested('PurchaseOrderLineSchema'), required=False)
 
     @validates("status")
     def validate_status(self, value):
         valid_statuses = [e.value for e in Status]
         if value not in valid_statuses:
             raise ValidationError(f"Invalid status. Valid options are: {', '.join(valid_statuses)}")
+    
+    @validates("payment_terms")
+    def validate_payment_terms(self, value):
+        valid_terms = [e.value for e in PaymentTerms]
+        if value not in valid_terms:
+            raise ValidationError(f"Invalid payment terms. Valid options are: {', '.join(valid_terms)}")
 
     @post_load
     def make_purchase_order(self, data, **kwargs):

@@ -5,7 +5,7 @@ from .. import bp
 from ...schemas import Status
 from ...schemas.product import Product
 from ...schemas.purchase_order import PurchaseOrder
-from ...schemas.purchase_order_line import PurchaseOrderLine
+from ...schemas.purchase_order_line import PurchaseOrderLine, PurchaseOrderLineSchema
 from ...schemas.supplier import Supplier
 
 @bp.route('/order', methods=['POST'])
@@ -42,7 +42,7 @@ def place_order():
 
 def send_purchase_orders(purchase_orders):
     for purchase_order in purchase_orders:
-        supplier = Supplier.get_supplier_by_id(purchase_order.supplier_id)
+        supplier = Supplier.query.get(purchase_order.supplier_id)
         supplier_response = supplier.send_purchase_order(purchase_order)
         
         if supplier_response['status'] != Status.APPROVED.value:
@@ -54,7 +54,7 @@ def send_purchase_orders(purchase_orders):
 
 def create_purchase_orders(purchase_orders, suppliers):
     for supplier_id, line_items in suppliers.items():
-        total_amount = sum(item.unit_total for item in line_items)
+        total_amount = sum((item.unit_cost * item.quantity) for item in line_items)
 
         purchase_order = PurchaseOrder(
             order_date=date.today(),
@@ -73,16 +73,17 @@ def create_po_line_items(order_data, suppliers):
         if not product:
             raise Exception(f"Product with ID {pid} not found")
             
-        if product['supplier_id'] not in suppliers:
-            suppliers[product['supplier_id']] = []
+        if product.supplier_id not in suppliers:
+            suppliers[product.supplier_id] = []
 
-        line_item = PurchaseOrderLine(
-            product_id=product['product_id'],
-            unit_price=details['unit_price'],
-            quantity=details['quantity'],
-            unit_total=int(details['quantity']) * float(details['unit_price'])
-        )
-        suppliers[product['supplier_id']].append(line_item)
+        schema = PurchaseOrderLineSchema()
+        line_item = schema.load({
+            'product_id': product.product_id,
+            'unit_cost': details['unit_price'],
+            'quantity': details['quantity'],
+        })
+
+        suppliers[product.supplier_id].append(line_item)
 
 
 def transform_order_data(form_data):
@@ -102,4 +103,4 @@ def transform_order_data(form_data):
             'quantity': form_data.get(f'quantity-{pid}')
         }
 
-    return transformed 
+    return transformed

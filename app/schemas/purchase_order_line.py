@@ -1,14 +1,22 @@
 from marshmallow import Schema, fields, post_load, validates, ValidationError
+from app.database import db
 
 
-class PurchaseOrderLine:
-    def __init__(self, product_id, quantity, unit_cost, purchase_order_id=None):
-        self.product_id = product_id
-        self.purchase_order_id = purchase_order_id
-        self.quantity = quantity
-        self.unit_cost = unit_cost
+class PurchaseOrderLine(db.Model):
+    __tablename__ = 'purchase_order_lines'
+
+    id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'), nullable=False)
+    purchase_order_id = db.Column(db.Integer, db.ForeignKey('purchase_orders.id'), nullable=True)
+    quantity = db.Column(db.Integer, nullable=False)
+    unit_cost = db.Column(db.Float, nullable=False)
+
+    purchase_order = db.relationship('PurchaseOrder', back_populates='line_items')
+    product = db.relationship('Product', backref='purchase_order_lines')
+
 
 class PurchaseOrderLineSchema(Schema):
+    id = fields.Int(dump_only=True)
     purchase_order_id = fields.Int(dump_only=True)
     product_id = fields.Int(required=True)
     quantity = fields.Int(required=True)

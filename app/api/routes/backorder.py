@@ -14,10 +14,10 @@ def backorder():
         purchase_order_line = schema.load(request.json)
 
         # Calculate total amount
-        total_amount = (purchase_order_line.quantity * purchase_order_line.unit_price) * 1.07
+        total_amount = (purchase_order_line.quantity * purchase_order_line.unit_price)
 
         supplier_id = Product.get_supplier_id(purchase_order_line.product_id)
-        supplier = Supplier.get_supplier_by_id(supplier_id)
+        supplier = Supplier.query.get(supplier_id)
 
         purchase_order = PurchaseOrder(
             order_date=date.today(),

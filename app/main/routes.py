@@ -1,17 +1,29 @@
-from flask import render_template, request, session, current_app
+from flask import render_template, request, session
 from . import bp
+from ..schemas.product import Product
+from ..schemas.supplier import Supplier
 
-def get_fake_products():
-    # Mock database query returning product data
-    return [
-        {
-            "product_id": i,
-            "product_name": f"Product {i}",
-            "unit_price": f"{(i * 5 + 10):.2f}",
-            "quantity": 50 * i,
-            "supplier_name": f"Supplier {chr(65 + (i % 3))}",
-        } for i in range(1, 51)
-    ]
+def get_products():
+    """Get all products from the database with their supplier names"""
+    products = []
+    
+    # Query all products with their suppliers, sorted by quantity
+    product_list = Product.query.order_by(Product.quantity.asc()).all()
+    
+    for product in product_list:
+        # Get the supplier name for each product
+        supplier = Supplier.query.get(product.supplier_id)
+        supplier_name = supplier.supplier_name if supplier else "Unknown Supplier"
+        
+        products.append({
+            "product_id": product.product_id,
+            "product_name": product.product_name,
+            "unit_price": f"{product.unit_price:.2f}",
+            "quantity": product.quantity,
+            "supplier_name": supplier_name,
+        })
+    
+    return products
 
 @bp.route('/')
 def index():
@@ -21,7 +33,7 @@ def index():
 def place_order():
     page = request.args.get('page', 1, type=int)
     per_page = 10
-    products = get_fake_products() # TODO: Replace with database query
+    products = get_products()  # Get products from database
     total = len(products)
     
     # Store in session for later access
@@ -41,7 +53,7 @@ def po_form():
     selected_ids = [int(id) for id in request.form.get('selected_products').split(',') if id]
     
     # Get all products
-    all_products = get_fake_products()
+    all_products = get_products()
     
     # Filter selected products from complete list
     selected_products = [

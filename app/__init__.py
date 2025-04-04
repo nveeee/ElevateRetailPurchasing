@@ -1,13 +1,17 @@
 from flask import Flask
 import logging
-
-# TODO: Database connection commented out while working locally
-# from .database import engine, Base
-# Base.metadata.create_all(bind=engine)
+from .database import db
 
 def create_app(config_class=None):
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'your-secret-key'
+    
+    # Configure SQLAlchemy
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///elevate_retail.db'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    
+    # Initialize SQLAlchemy
+    db.init_app(app)
     
     # Configure logging to terminal
     stream_handler = logging.StreamHandler()
@@ -27,5 +31,13 @@ def create_app(config_class=None):
 
     from .api import bp as api_bp
     app.register_blueprint(api_bp, url_prefix='/api')
+
+    # Register CLI commands
+    from .cli import register_commands
+    register_commands(app)
+    
+    # Create database tables
+    with app.app_context():
+        db.create_all()
 
     return app
