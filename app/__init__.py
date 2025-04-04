@@ -1,6 +1,10 @@
 from flask import Flask
 import logging
 
+# TODO: Database connection commented out while working locally
+# from .database import engine, Base
+# Base.metadata.create_all(bind=engine)
+
 def create_app(config_class=None):
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'your-secret-key'
