@@ -5,7 +5,7 @@ from .. import bp
 from ...schemas import Status
 from ...schemas.product import Product
 from ...schemas.purchase_order import PurchaseOrder
-from ...schemas.purchase_order_item import PurchaseOrderItem, PurchaseOrderItemSchema
+from ...schemas.purchase_order_item import PurchaseOrderItemSchema
 from ...schemas.supplier import Supplier
 
 @bp.route('/order', methods=['POST'])

@@ -6,19 +6,19 @@ from ..schemas.supplier import Supplier
 def get_products(limit=None):
     """Get all products from the database with their supplier names"""
     products = []
-    
+
     # Query all products with their suppliers, sorted by quantity
     query = Product.query.order_by(Product.quantity.asc())
     if limit is not None:
         query = query.limit(limit)
 
     product_list = query.all()
-    
+
     for product in product_list:
         # Get the supplier name for each product
         supplier = Supplier.query.get(product.supplier_id)
         supplier_name = supplier.supplier_name if supplier else "Unknown Supplier"
-        
+
         products.append({
             "product_id": product.product_id,
             "product_name": product.product_name,
@@ -26,7 +26,7 @@ def get_products(limit=None):
             "quantity": product.quantity,
             "supplier_name": supplier_name,
         })
-    
+
     return products
 
 @bp.route('/')
@@ -39,10 +39,10 @@ def place_order():
     per_page = 10
     products = get_products()  # Get products from database
     total = len(products)
-    
+
     # Store in session for later access
-    session['current_products'] = products[(page-1)*per_page : page*per_page]
-    
+    session['current_products'] = products[(page - 1) * per_page: page * per_page]
+
     return render_template(
         'place_order.html',
         active_page='place_order',
@@ -55,16 +55,16 @@ def place_order():
 def po_form():
     # Get IDs from hidden input
     selected_ids = [int(id) for id in request.form.get('selected_products').split(',') if id]
-    
+
     # Get all products
     all_products = get_products()
-    
+
     # Filter selected products from complete list
     selected_products = [
         p for p in all_products
         if p['product_id'] in selected_ids
     ]
-    
+
     return render_template(
         'po_form.html',
         active_page='place_order',
