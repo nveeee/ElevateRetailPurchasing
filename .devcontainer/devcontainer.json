@@ -1,7 +1,10 @@
 {
 	"name": "Python 3 Flask App",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/python:0-3.11",
+	"build": {
+		"context": "..",
+		"dockerfile": "Dockerfile"
+	},
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
@@ -29,6 +32,13 @@
 				"redhat.vscode-yaml", // Useful for editing YAML files if needed
 				"esbenp.prettier-vscode" // For formatting other file types like JSON, MD
 			]
+		}
+	},
+	"features": {
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {
+			"installDockerComposeSwitch": true,
+			"version": "latest",
+			"dockerDashComposeVersion": "latest"
 		}
 	}
 
