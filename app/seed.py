@@ -1,11 +1,10 @@
 import random
-from datetime import datetime, timedelta
 from faker import Faker
 from app import create_app, db
 from app.schemas.supplier import Supplier
 from app.schemas.product import Product
 from app.schemas.purchase_order import PurchaseOrder
-from app.schemas.purchase_order_line import PurchaseOrderLine
+from app.schemas.purchase_order_item import PurchaseOrderItem
 from app.schemas.enums import PaymentTerms, Status
 
 fake = Faker()
@@ -84,7 +83,7 @@ def seed_purchase_orders(count=20):
     print(f"Added {count} purchase orders")
     return purchase_orders
 
-def seed_purchase_order_lines(min_lines=1, max_lines=5):
+def seed_purchase_order_item(min_lines=1, max_lines=5):
     """Seed the database with fake purchase order lines"""
     # Get all purchase order IDs
     po_ids = [po.id for po in PurchaseOrder.query.all()]
@@ -98,7 +97,7 @@ def seed_purchase_order_lines(min_lines=1, max_lines=5):
         print("No products found. Please seed products first.")
         return []
     
-    purchase_order_lines = []
+    purchase_order_item = []
     
     for po_id in po_ids:
         # Generate random number of line items for each purchase order
@@ -111,30 +110,30 @@ def seed_purchase_order_lines(min_lines=1, max_lines=5):
             unit_cost = product.unit_price
             line_total = quantity * unit_cost
             
-            po_line = PurchaseOrderLine(
+            po_line = PurchaseOrderItem(
                 product_id=product.id,
                 purchase_order_id=po_id,
                 quantity=quantity,
                 unit_cost=unit_cost
             )
-            purchase_order_lines.append(po_line)
+            purchase_order_item.append(po_line)
             po_total += line_total
         
         # Update the purchase order's total amount
         po = PurchaseOrder.query.get(po_id)
         po.total_amount = po_total
     
-    db.session.add_all(purchase_order_lines)
+    db.session.add_all(purchase_order_item)
     db.session.commit()
     print(f"Added purchase order lines to {len(po_ids)} purchase orders")
-    return purchase_order_lines
+    return purchase_order_item
 
 def seed_all():
     """Seed all tables with fake data"""
     print("Starting database seeding...")
     
     # Clear existing data
-    PurchaseOrderLine.query.delete()
+    PurchaseOrderItem.query.delete()
     PurchaseOrder.query.delete()
     Product.query.delete()
     Supplier.query.delete()
@@ -144,7 +143,7 @@ def seed_all():
     seed_suppliers(10)
     seed_products(50)
     seed_purchase_orders(20)
-    seed_purchase_order_lines(1, 5)
+    seed_purchase_order_item(1, 5)
     
     print("Database seeding completed!")
 

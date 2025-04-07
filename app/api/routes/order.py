@@ -5,7 +5,7 @@ from .. import bp
 from ...schemas import Status
 from ...schemas.product import Product
 from ...schemas.purchase_order import PurchaseOrder
-from ...schemas.purchase_order_line import PurchaseOrderLine, PurchaseOrderLineSchema
+from ...schemas.purchase_order_item import PurchaseOrderItem, PurchaseOrderItemSchema
 from ...schemas.supplier import Supplier
 
 @bp.route('/order', methods=['POST'])
@@ -96,7 +96,7 @@ def create_po_line_items(order_data, suppliers):
         if product.supplier_id not in suppliers:
             suppliers[product.supplier_id] = []
 
-        schema = PurchaseOrderLineSchema()
+        schema = PurchaseOrderItemSchema()
         line_item = schema.load({
             'product_id': product.product_id,
             'unit_cost': details['unit_price'],

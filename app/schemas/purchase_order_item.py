@@ -2,8 +2,8 @@ from marshmallow import Schema, fields, post_load, validates, ValidationError
 from app.database import db
 
 
-class PurchaseOrderLine(db.Model):
-    __tablename__ = 'purchase_order_lines'
+class PurchaseOrderItem(db.Model):
+    __tablename__ = 'purchase_order_items'
 
     id = db.Column(db.Integer, primary_key=True)
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'), nullable=False)
@@ -12,10 +12,10 @@ class PurchaseOrderLine(db.Model):
     unit_cost = db.Column(db.Float, nullable=False)
 
     purchase_order = db.relationship('PurchaseOrder', back_populates='line_items')
-    product = db.relationship('Product', backref='purchase_order_lines')
+    product = db.relationship('Product', backref='purchase_order_items')
 
 
-class PurchaseOrderLineSchema(Schema):
+class PurchaseOrderItemSchema(Schema):
     id = fields.Int(dump_only=True)
     purchase_order_id = fields.Int(dump_only=True)
     product_id = fields.Int(required=True)
@@ -34,4 +34,4 @@ class PurchaseOrderLineSchema(Schema):
 
     @post_load
     def make_purchase_order_line(self, data, **kwargs):
-        return PurchaseOrderLine(**data)
+        return PurchaseOrderItem(**data)

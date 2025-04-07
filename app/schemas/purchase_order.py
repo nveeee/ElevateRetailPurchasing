@@ -37,7 +37,7 @@ class PurchaseOrderSchema(Schema):
     payment_terms = fields.Str(required=True)
     supplier_id = fields.Int(required=True)
     status = fields.Str(required=True)
-    line_items = fields.List(fields.Nested('PurchaseOrderLineSchema'), required=False)
+    line_items = fields.List(fields.Nested('PurchaseOrderItemSchema'), required=False)
 
     @validates("status")
     def validate_status(self, value):

@@ -1,8 +1,8 @@
 import pytest
 from marshmallow import ValidationError
-from app.schemas.purchase_order_line import PurchaseOrderLine, PurchaseOrderLineSchema
+from app.schemas.purchase_order_item import PurchaseOrderItem, PurchaseOrderItemSchema
 
-class TestPurchaseOrderLineClass:
+class TestPurchaseOrderItemClass:
     @pytest.fixture
     def valid_line_data(self):
         return {
@@ -13,17 +13,17 @@ class TestPurchaseOrderLineClass:
         }
 
     def test_line_creation(self, valid_line_data):
-        line = PurchaseOrderLine(**valid_line_data)
+        line = PurchaseOrderItem(**valid_line_data)
 
         assert line.product_id == 501
         assert line.quantity == 10
         assert line.unit_price == 25.99
         assert line.unit_total == 259.90
 
-class TestPurchaseOrderLineSchema:
+class TestPurchaseOrderItemSchema:
     @pytest.fixture
     def schema(self):
-        return PurchaseOrderLineSchema()
+        return PurchaseOrderItemSchema()
 
     @pytest.fixture
     def valid_data(self):
@@ -36,7 +36,7 @@ class TestPurchaseOrderLineSchema:
 
     def test_valid_data_loading(self, schema, valid_data):
         line = schema.load(valid_data)
-        assert isinstance(line, PurchaseOrderLine)
+        assert isinstance(line, PurchaseOrderItem)
         assert line.quantity == 5
         assert line.unit_total == 99.95
 

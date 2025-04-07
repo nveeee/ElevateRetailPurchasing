@@ -2,7 +2,7 @@ from datetime import date
 from flask import jsonify, request
 
 from .. import bp
-from ...schemas import PurchaseOrderLineSchema, Status
+from ...schemas import PurchaseOrderItemSchema, Status
 from ...schemas.product import Product
 from ...schemas.purchase_order import PurchaseOrder
 from ...schemas.supplier import Supplier
@@ -35,13 +35,13 @@ def backorder():
         Error: A JSON response with an error message if the operation fails.
     """
     try:
-        schema = PurchaseOrderLineSchema()
-        purchase_order_line = schema.load(request.json)
+        schema = PurchaseOrderItemSchema()
+        purchase_order_item = schema.load(request.json)
 
         # Calculate total amount
-        total_amount = (purchase_order_line.quantity * purchase_order_line.unit_price)
+        total_amount = (purchase_order_item.quantity * purchase_order_item.unit_price)
 
-        supplier_id = Product.get_supplier_id(purchase_order_line.product_id)
+        supplier_id = Product.get_supplier_id(purchase_order_item.product_id)
         supplier = Supplier.query.get(supplier_id)
 
         purchase_order = PurchaseOrder(
@@ -50,7 +50,7 @@ def backorder():
             payment_terms=supplier.payment_terms,
             supplier_id=supplier_id,
             status=Status.PENDING.value,
-            line_items=[purchase_order_line]
+            line_items=[purchase_order_item]
         )
 
         supplier_response = supplier.send_purchase_order(purchase_order)

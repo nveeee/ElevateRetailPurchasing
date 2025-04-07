@@ -1,6 +1,5 @@
 import click
-from flask.cli import with_appcontext
-from app.seed import seed_all, seed_suppliers, seed_products, seed_purchase_orders, seed_purchase_order_lines
+from app.seed import seed_all, seed_suppliers, seed_products, seed_purchase_orders, seed_purchase_order_item
 
 def register_commands(app):
     """Register CLI commands for the application"""
@@ -18,13 +17,13 @@ def register_commands(app):
             seed_all()
         else:
             # Clear existing data
-            from app.schemas.purchase_order_line import PurchaseOrderLine
+            from app.schemas.purchase_order_item import PurchaseOrderItem
             from app.schemas.purchase_order import PurchaseOrder
             from app.schemas.product import Product
             from app.schemas.supplier import Supplier
             from app import db
             
-            PurchaseOrderLine.query.delete()
+            PurchaseOrderItem.query.delete()
             PurchaseOrder.query.delete()
             Product.query.delete()
             Supplier.query.delete()
@@ -33,4 +32,4 @@ def register_commands(app):
             seed_suppliers(suppliers)
             seed_products(products)
             seed_purchase_orders(orders)
-            seed_purchase_order_lines(min_lines, max_lines)
+            seed_purchase_order_item(min_lines, max_lines)
