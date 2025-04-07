@@ -15,12 +15,13 @@ def place_order():
 
         Request Form Data:
             {
-                "product_id-1": 123,
-                "unit_price-1": 15.0,
-                "quantity-1": 10,
-                "product_id-2": 456,
-                "unit_price-2": 20.0,
-                "quantity-2": 5
+                "123": {
+                    "unit_price": 15.0,
+                    "quantity": 10
+                },
+                "456": {
+                    "unit_price": 20.0,
+                    "quantity": 5
             }
         Returns:
             Response: A JSON response indicating the success of the order placement:
