@@ -10,7 +10,7 @@
       <excludeFolder url="file://$MODULE_DIR$/.venv" />
       <excludeFolder url="file://$MODULE_DIR$/instance" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.12 (ElevateRetailPurchasing)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.13 (ElevateRetailPurchasing)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="TemplatesService">
