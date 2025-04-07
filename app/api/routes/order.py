@@ -10,6 +10,26 @@ from ...schemas.supplier import Supplier
 
 @bp.route('/order', methods=['POST'])
 def place_order():
+    """
+        Places one or more orders based on submitted form data.
+
+        Request Form Data:
+            {
+                "product_id-1": 123,
+                "unit_price-1": 15.0,
+                "quantity-1": 10,
+                "product_id-2": 456,
+                "unit_price-2": 20.0,
+                "quantity-2": 5,
+                ...
+            }
+        Returns:
+            Response: A JSON response indicating the success of the order placement:
+            {
+                "message": "Order(s) Placed"
+            }
+            Error: A JSON response with an error message if the operation fails.
+    """
     try:
         data = request.form.to_dict()
 
@@ -29,7 +49,7 @@ def place_order():
             app.logger.info('Successfully sent all purchase orders to suppliers')
             
             return jsonify({
-                'message': 'Order(s) has been placed'
+                'message': 'Order(s) Placed'
             }), 201
         except Exception as e:
             app.logger.error(f'Error processing order: {str(e)}')

@@ -9,6 +9,31 @@ from ...schemas.supplier import Supplier
 
 @bp.route('/backorder', methods=['POST'])
 def backorder():
+    """
+    Places a backorder for a purchase order line item.
+
+    Request JSON:
+        {
+            "product_id": 123,
+            "quantity": 10,
+            "unit_price": 15.0
+        }
+    Returns:
+        Response: A JSON response containing the details of the placed purchase order if successful:
+        {
+            "message": "Backorder successfully placed",
+            "purchase_order": {
+                "id": 456,
+                "supplier_id": 789,
+                "order_date": "2025-04-07",
+                "total_amount": 150.0,
+                "payment_terms": "Net 30",
+                "status": "APPROVED"
+            }
+        }
+
+        Error: A JSON response with an error message if the operation fails.
+    """
     try:
         schema = PurchaseOrderLineSchema()
         purchase_order_line = schema.load(request.json)
