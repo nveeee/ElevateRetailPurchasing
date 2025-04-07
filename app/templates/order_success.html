@@ -1,26 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Order Success</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
-    <header>
-        <h1>My Store</h1>
-        <!-- You can add navbar or header here if needed -->
-    </header>
+{% extends 'base.html' %}
 
-    <main>
-        <section style="text-align: center; padding: 50px;">
-            <h2>🎉 Order Placed Successfully!</h2>
-            <p>Thank you for your purchase.</p>
-            <a href="/" class="btn">Return to Home</a>
-        </section>
-    </main>
+{% block title %}Home - {{ super() }}{% endblock %}
 
-    <footer>
-        <!-- Optional footer -->
-    </footer>
-</body>
-</html>
+{% block content %}
+<main>
+    {% include 'includes/success_message.html' %}
+</main>
+{% endblock %} 
+
+{% block head %}
+{{ super() }}
+<style>
+    /* Add home styles here */
+</style>
+{% endblock %}
