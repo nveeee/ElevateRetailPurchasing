@@ -20,8 +20,7 @@ def place_order():
                 "quantity-1": 10,
                 "product_id-2": 456,
                 "unit_price-2": 20.0,
-                "quantity-2": 5,
-                ...
+                "quantity-2": 5
             }
         Returns:
             Response: A JSON response indicating the success of the order placement:

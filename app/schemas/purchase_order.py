@@ -14,7 +14,7 @@ class PurchaseOrder(db.Model):
     supplier_id = db.Column(db.Integer, db.ForeignKey('suppliers.id'), nullable=False)
     status = db.Column(db.String(20), nullable=False, default=Status.PENDING.value)
 
-    line_items = db.relationship('PurchaseOrderLine', back_populates='purchase_order', cascade='all, delete-orphan')
+    line_items = db.relationship('PurchaseOrderItem', back_populates='purchase_order', cascade='all, delete-orphan')
 
     @classmethod
     def save_to_db(cls, purchase_order):
