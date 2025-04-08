@@ -7,7 +7,6 @@ class PaymentTerms(Enum):
     COD = "COD"  # Cash On Delivery
 
 class Status(Enum):
-    PENDING = "PENDING"
-    APPROVED = "APPROVED"
-    REJECTED = "REJECTED"
-    COMPLETED = "COMPLETED" 
+    PENDING = "Pending"
+    RECEIVED = "Received"
+    CANCELLED = "Cancelled"

@@ -7,7 +7,7 @@ def create_app(config_class=None):
     app.config['SECRET_KEY'] = 'your-secret-key'
     
     # Configure SQLAlchemy
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///elevate_retail.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mssql+pyodbc://sa:Your-Password-Here321@localhost:1433/master?driver=ODBC+Driver+17+for+SQL+Server'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     
     # Initialize SQLAlchemy

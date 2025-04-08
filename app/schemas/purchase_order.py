@@ -3,16 +3,15 @@ from .enums import PaymentTerms, Status
 from app.database import db
 from datetime import datetime
 
-class PurchaseOrder(db.Model):
-    __tablename__ = 'purchase_orders'
+from flask import current_app as app
 
-    id = db.Column(db.Integer, primary_key=True)
-    purchase_order_id = db.Column(db.String(20), unique=True, nullable=False)
-    order_date = db.Column(db.Date, nullable=False, default=datetime.utcnow)
-    total_amount = db.Column(db.Float, nullable=False)
-    payment_terms = db.Column(db.String(20), nullable=False, default=PaymentTerms.NET_30.value)
-    supplier_id = db.Column(db.Integer, db.ForeignKey('suppliers.id'), nullable=False)
-    status = db.Column(db.String(20), nullable=False, default=Status.PENDING.value)
+class PurchaseOrder(db.Model):
+    __tablename__ = 'Purchase_Order'
+
+    id = db.Column('Purchase_Order_ID', db.Integer, primary_key=True)
+    order_date = db.Column('Order_Date', db.Date, nullable=False, default=datetime.utcnow)
+    supplier_id = db.Column(db.Integer, db.ForeignKey('Supplier.Supplier_ID'), nullable=False)
+    status = db.Column('Status', db.String(20), nullable=False, default=Status.PENDING.value)
 
     line_items = db.relationship('PurchaseOrderItem', back_populates='purchase_order', cascade='all, delete-orphan')
 
@@ -24,9 +23,7 @@ class PurchaseOrder(db.Model):
             return purchase_order
         except Exception as e:
             db.session.rollback()
-            # TODO: Log the error saving to database
-            # Do NOT raise error. Purchase Order was successfully placed.
-            pass
+            app.logger.error(f"Error saving purchase order: {e}")
 
 
 class PurchaseOrderSchema(Schema):

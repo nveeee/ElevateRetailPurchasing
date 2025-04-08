@@ -1,6 +1,8 @@
 from datetime import date
 from flask import jsonify, request, current_app as app
 
+from app.schemas.inventory import Inventory
+
 from .. import bp
 from ...schemas import Status
 from ...schemas.product import Product
@@ -63,7 +65,7 @@ def send_purchase_orders(purchase_orders):
         supplier = Supplier.query.get(purchase_order.supplier_id)
         supplier_response = supplier.send_purchase_order(purchase_order)
         
-        if supplier_response['status'] != Status.APPROVED.value:
+        if supplier_response['status'] != Status.RECEIVED.value:
             raise Exception("Supplier did not approve the order")
 
         purchase_order.status = supplier_response['status']
@@ -72,12 +74,15 @@ def send_purchase_orders(purchase_orders):
 
 def create_purchase_orders(purchase_orders, suppliers):
     for supplier_id, line_items in suppliers.items():
-        total_amount = sum((item.unit_cost * item.quantity) for item in line_items)
+        total_amount = 0
+        for item in line_items:
+            inventory = Inventory.query.filter_by(product_id=item.product_id).first()
+            total_amount += inventory.unit_price * item.quantity
+
+        # TODO: Figure out solution for missing Purchase Order Information
 
         purchase_order = PurchaseOrder(
             order_date=date.today(),
-            total_amount=total_amount,
-            payment_terms="NET_30",
             supplier_id=supplier_id,
             status=Status.PENDING.value,
             line_items=line_items
@@ -96,8 +101,7 @@ def create_po_line_items(order_data, suppliers):
 
         schema = PurchaseOrderItemSchema()
         line_item = schema.load({
-            'product_id': product.product_id,
-            'unit_cost': details['unit_price'],
+            'product_id': product.id,
             'quantity': details['quantity'],
         })
 

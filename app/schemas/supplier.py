@@ -4,15 +4,13 @@ from .enums import PaymentTerms
 from app.database import db
 
 class Supplier(db.Model):
-    __tablename__ = 'suppliers'
+    __tablename__ = 'Supplier'
     
-    id = db.Column(db.Integer, primary_key=True)
-    supplier_id = db.Column(db.Integer, unique=True, nullable=False)
-    supplier_name = db.Column(db.String(100), nullable=False)
-    contact_name = db.Column(db.String(255), nullable=False)
-    contact_email = db.Column(db.String(255), nullable=False)
-    contact_phone = db.Column(db.String(255), nullable=False)
-    payment_terms = db.Column(db.String(255), default=PaymentTerms.NET_30.value)
+    id = db.Column('Supplier_ID', db.Integer, primary_key=True)
+    supplier_name = db.Column('Supplier_Name', db.String(100), nullable=False)
+    contact_name = db.Column('Contact_Name', db.String(255), nullable=False)
+    contact_email = db.Column('Contact_Email', db.String(255), nullable=False)
+    contact_phone = db.Column('Contact_Phone', db.String(255), nullable=False)
 
     purchase_orders = db.relationship('PurchaseOrder', backref='supplier', lazy=True)
 
@@ -21,7 +19,7 @@ class Supplier(db.Model):
             # TODO: Implement supplier communication logic
             fake_supplier_response = {
                 "order_id": "12345",
-                "status": "APPROVED",
+                "status": "Received",
                 "estimated_delivery": "2025-12-31",
                 "message": "Purchase order received and approved."
             }
@@ -44,18 +42,11 @@ class Supplier(db.Model):
 
 
 class SupplierSchema(Schema):
-    supplier_id = fields.Int(required=True)
+    id = fields.Int(dump_only=True)
     supplier_name = fields.Str(required=True, validate=validate.Length(min=1, max=100))
     contact_name = fields.Str(required=True, validate=validate.Length(max=255))
     contact_email = fields.Str(required=True, validate=validate.Length(max=255))
     contact_phone = fields.Str(required=True, validate=validate.Length(max=255))
-    payment_terms = fields.Str(required=True, validate=validate.Length(max=255))
-
-    @validates("payment_terms")
-    def validate_payment_terms(self, value):
-        valid_terms = [e.value for e in PaymentTerms]
-        if value not in valid_terms:
-            raise ValidationError(f"Invalid payment terms. Valid options are: {', '.join(valid_terms)}")
 
     @post_load
     def make_supplier(self, data, **kwargs):
