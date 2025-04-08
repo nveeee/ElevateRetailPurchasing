@@ -261,3 +261,27 @@ header {
     gap: 1.5rem;
     align-items: end;
 }
+
+.alert-red {
+    background-color: #FF4C4C;  /* red color for low stock */
+    color: white;
+}
+
+.alert-yellow {
+    background-color: #FFDF6E;  /* yellow color for medium stock */
+    color: black;
+}
+
+.alerts-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.alerts-table th, .alerts-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.table-container {
+    margin: 20px 0;
+}
