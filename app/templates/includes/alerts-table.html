@@ -11,9 +11,9 @@
         <tbody>
 
             {% for product in products %}
-                {% if product.quantity <= 5 %}
+                {% if product.quantity <= 100 %}
                     <tr class="alert-red"> <!-- Low stock -->
-                {% elif product.quantity <= 20 %}
+                {% elif product.quantity <= 2000 %}
                     <tr class="alert-yellow"> <!-- Medium stock -->
                 {% else %}
                     <tr> <!-- Normal stock -->
