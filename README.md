@@ -10,6 +10,7 @@ The Elevate Retail Purchasing microservice processes orders by checking inventor
 - [How Flask Works](#how-flask-works)
 - [Flask Schemas](#flask-schemas)
 - [Usage](#usage)
+- [Development Database Setup](#development-database-setup)
 
 ---
 
@@ -186,5 +187,34 @@ python app.py
 ```
 
 Then, open your web browser and navigate to [http://127.0.0.1:5000/](http://127.0.0.1:5000/) to see the application in action.
+
+---
+
+## Development Database Setup
+
+### Docker Setup
+Run the Docker command to install SQL Server in a container:
+
+```bash
+docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=<password>" \
+   -p 1433:1433 --name sql1 --hostname sql1 \
+   -d \
+   mcr.microsoft.com/mssql/server:2022-latest
+```
+
+### Connect to the Database from Host Machine
+Inside of the terminal you can run the following command to connect to the database and begin issuing commands"
+
+```bash
+sudo /opt/mssql-tools/bin/sqlcmd -S localhost,1433 -U sa -P "<password>"
+```
+
+### Create Database Tables and Insert Dummy Data
+Use -i to execute SQL from files on your host machine:
+
+```bash
+sudo /opt/mssql-tools/bin/sqlcmd -S localhost,1433 -U sa -P "<password>" -i db/Elevate_Create_Table.sql 
+sudo /opt/mssql-tools/bin/sqlcmd -S localhost,1433 -U sa -P "<password>" -i db/Elevate_Insert.sql 
+```
 
 ---
