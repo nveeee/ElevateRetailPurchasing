@@ -6,40 +6,23 @@
                 <th>Product Name</th>
                 <th>Current Stock</th>
                 <th>Supplier</th>
-                <th>Days Until Restock</th>
             </tr>
         </thead>
         <tbody>
-            <tr class="alert-red">
-                <td>Premium Coffee Beans</td>
-                <td>15</td>
-                <td>Bean Supreme Co.</td>
-                <td>1</td>
-            </tr>
-            <tr class="alert-red">
-                <td>Ceramic Mugs</td>
-                <td>42</td>
-                <td>Tableware Inc</td>
-                <td>2</td>
-            </tr>
-            <tr class="alert-red">
-                <td>Paper Cups</td>
-                <td>300</td>
-                <td>Disposable Goods</td>
-                <td>5</td>
-            </tr>
-            <tr class="alert-yellow">
-                <td>Espresso Machines</td>
-                <td>3</td>
-                <td>Pro Kitchen</td>
-                <td>6</td>
-            </tr>
-            <tr class="alert-yellow">
-                <td>Vanilla Syrup</td>
-                <td>28</td>
-                <td>Flavor Masters</td>
-                <td>14</td>
-            </tr>
+
+            {% for product in products %}
+                {% if product.quantity <= 5 %}
+                    <tr class="alert-red"> <!-- Low stock -->
+                {% elif product.quantity <= 20 %}
+                    <tr class="alert-yellow"> <!-- Medium stock -->
+                {% else %}
+                    <tr> <!-- Normal stock -->
+                {% endif %}
+                    <td>{{ product.product_name }}</td>
+                    <td>{{ product.quantity }}</td>
+                    <td>{{ product.supplier_name }}</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 </div>
