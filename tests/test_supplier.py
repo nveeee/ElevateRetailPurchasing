@@ -8,6 +8,7 @@ from app.schemas.enums import PaymentTerms
 import json
 from unittest.mock import patch
 
+
 class TestSupplierClass:
     @pytest.fixture
     def valid_supplier_data(self):
@@ -20,11 +21,12 @@ class TestSupplierClass:
 
     def test_supplier_creation(self, valid_supplier_data):
         supplier = Supplier(**valid_supplier_data)
-        
+
         assert supplier.supplier_id == 501
         assert supplier.supplier_name == "Acme Corp"
         assert supplier.contact_info == "contact@acme.com"
         assert supplier.payment_terms == PaymentTerms.NET_30.value
+
 
 class TestSupplierSchema:
     @pytest.fixture
@@ -58,7 +60,7 @@ class TestSupplierSchema:
         incomplete_data = {
             "supplier_name": "Missing Fields Inc."
         }
-        
+
         with pytest.raises(ValidationError) as exc:
             schema.load(incomplete_data)
         errors = exc.value.messages
@@ -96,6 +98,7 @@ class TestSupplierSchema:
             schema.load(invalid_data)
         assert "Longer than maximum length" in str(exc.value)
 
+
 class TestSupplierEndpoint:
     @pytest.fixture
     def client(self):
@@ -120,7 +123,7 @@ class TestSupplierEndpoint:
             data=json.dumps(valid_supplier_data),
             content_type='application/json'
         )
-        
+
         assert response.status_code == 201
         data = json.loads(response.data)
         assert data['message'] == 'Supplier created'
@@ -135,7 +138,7 @@ class TestSupplierEndpoint:
             ({'supplier_id': 504, 'contact_info': 'test@test.com'}, 'supplier_name'),
             ({'supplier_id': 505, 'supplier_name': 'Missing Contact'}, 'contact_info')
         ]
-        
+
         for data, missing_field in test_cases:
             response = client.post(
                 '/api/create_supplier',
@@ -150,13 +153,13 @@ class TestSupplierEndpoint:
     def test_create_supplier_invalid_data_types(self, client, valid_supplier_data):
         invalid_data = valid_supplier_data.copy()
         invalid_data['supplier_id'] = "not-an-integer"
-        
+
         response = client.post(
             '/api/create_supplier',
             data=json.dumps(invalid_data),
             content_type='application/json'
         )
-        
+
         assert response.status_code == 400
         errors = json.loads(response.data)['errors']
         assert 'supplier_id' in errors
@@ -166,7 +169,7 @@ class TestSupplierEndpoint:
         # Test empty supplier_name
         invalid_data = valid_supplier_data.copy()
         invalid_data['supplier_name'] = ""
-        
+
         response = client.post(
             '/api/create_supplier',
             data=json.dumps(invalid_data),
@@ -180,7 +183,7 @@ class TestSupplierEndpoint:
         # Test long contact_info
         invalid_data = valid_supplier_data.copy()
         invalid_data['contact_info'] = 'a' * 256
-        
+
         response = client.post(
             '/api/create_supplier',
             data=json.dumps(invalid_data),
@@ -194,14 +197,14 @@ class TestSupplierEndpoint:
     def test_server_error_handling(self, client, valid_supplier_data):
         with patch('app.api.routes.supplier.SupplierSchema.load') as mock_load:
             mock_load.side_effect = Exception('DB error')
-            
+
             response = client.post(
                 '/api/create_supplier',
                 data=json.dumps(valid_supplier_data),
                 content_type='application/json'
             )
-            
+
             assert response.status_code == 500
             data = json.loads(response.data)
             assert 'error' in data
-            assert 'DB error' in data['error'] 
+            assert 'DB error' in data['error']

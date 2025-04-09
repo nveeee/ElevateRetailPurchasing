@@ -5,6 +5,7 @@ from datetime import datetime
 
 from flask import current_app as app
 
+
 class PurchaseOrder(db.Model):
     __tablename__ = 'Purchase_Order'
 
@@ -13,7 +14,9 @@ class PurchaseOrder(db.Model):
     supplier_id = db.Column(db.Integer, db.ForeignKey('Supplier.Supplier_ID'), nullable=False)
     status = db.Column('Status', db.String(20), nullable=False, default=Status.PENDING.value)
 
-    line_items = db.relationship('PurchaseOrderItem', back_populates='purchase_order', cascade='all, delete-orphan')
+    line_items = db.relationship(
+        'PurchaseOrderItem', back_populates='purchase_order', cascade='all, delete-orphan'
+    )
 
     @classmethod
     def save_to_db(cls, purchase_order):
@@ -41,12 +44,14 @@ class PurchaseOrderSchema(Schema):
         valid_statuses = [e.value for e in Status]
         if value not in valid_statuses:
             raise ValidationError(f"Invalid status. Valid options are: {', '.join(valid_statuses)}")
-    
+
     @validates("payment_terms")
     def validate_payment_terms(self, value):
         valid_terms = [e.value for e in PaymentTerms]
         if value not in valid_terms:
-            raise ValidationError(f"Invalid payment terms. Valid options are: {', '.join(valid_terms)}")
+            raise ValidationError(
+                f"Invalid payment terms. Valid options are: {', '.join(valid_terms)}"
+            )
 
     @post_load
     def make_purchase_order(self, data, **kwargs):

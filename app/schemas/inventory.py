@@ -1,11 +1,14 @@
 from marshmallow import Schema, fields, post_load, validates, ValidationError
 from app.database import db
 
+
 class Inventory(db.Model):
     __tablename__ = 'Inventory'
 
     id = db.Column('Inventory_ID', db.Integer, primary_key=True)
-    product_id = db.Column('Product_ID', db.Integer, db.ForeignKey('Product.Product_ID'), nullable=False)
+    product_id = db.Column(
+        'Product_ID', db.Integer, db.ForeignKey('Product.Product_ID'), nullable=False
+    )
     quantity = db.Column('Quantity', db.Integer, nullable=False)
     unit_price = db.Column('Unit_Price', db.Numeric(8, 2), nullable=False)
     deleted_at = db.Column('Deleted_At', db.DateTime, nullable=True)
@@ -28,7 +31,7 @@ class InventorySchema(Schema):
     @validates("unit_price")
     def validate_unit_price(self, value):
         if value < 0:
-             raise ValidationError("Unit price must be greater than or equal to 0.")
+            raise ValidationError("Unit price must be greater than or equal to 0.")
 
     @post_load
     def make_inventory(self, data, **kwargs):

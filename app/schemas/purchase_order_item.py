@@ -7,7 +7,9 @@ class PurchaseOrderItem(db.Model):
 
     id = db.Column('Purchase_Order_Item_ID', db.Integer, primary_key=True)
     product_id = db.Column(db.Integer, db.ForeignKey('Product.Product_ID'), nullable=False)
-    purchase_order_id = db.Column(db.Integer, db.ForeignKey('Purchase_Order.Purchase_Order_ID'), nullable=True)
+    purchase_order_id = db.Column(
+        db.Integer, db.ForeignKey('Purchase_Order.Purchase_Order_ID'), nullable=True
+    )
     quantity = db.Column('Quantity', db.Integer, nullable=False)
 
     purchase_order = db.relationship('PurchaseOrder', back_populates='line_items')

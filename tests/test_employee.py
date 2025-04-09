@@ -2,6 +2,7 @@ import pytest
 from marshmallow import ValidationError
 from app.schemas.employee import Employee, EmployeeSchema
 
+
 class TestEmployeeClass:
     @pytest.fixture
     def sample_employee(self):
@@ -22,13 +23,6 @@ class TestEmployeeClass:
         assert sample_employee.verify_password("SecurePass123!") is True
         assert sample_employee.verify_password("wrongpassword") is False
 
-    # TODO: Implement get_employee_by_id with database
-    # def test_get_employee_by_id(self, sample_employee):
-    #     retrieved = Employee.get_employee_by_id(sample_employee.employee_id)
-    #     assert retrieved == sample_employee
-    # 
-    # def test_get_nonexistent_employee(self):
-    #     assert Employee.get_employee_by_id("non-existent-id") is None
 
 class TestEmployeeSchema:
     @pytest.fixture
@@ -82,4 +76,4 @@ class TestEmployeeSchema:
     def test_password_field_not_in_output(self, schema, valid_data):
         employee = schema.load(valid_data)
         result = schema.dump(employee)
-        assert "password" not in result 
+        assert "password" not in result

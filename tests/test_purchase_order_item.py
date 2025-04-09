@@ -2,6 +2,7 @@ import pytest
 from marshmallow import ValidationError
 from app.schemas.purchase_order_item import PurchaseOrderItem, PurchaseOrderItemSchema
 
+
 class TestPurchaseOrderItemClass:
     @pytest.fixture
     def valid_line_data(self):
@@ -19,6 +20,7 @@ class TestPurchaseOrderItemClass:
         assert line.quantity == 10
         assert line.unit_price == 25.99
         assert line.unit_total == 259.90
+
 
 class TestPurchaseOrderItemSchema:
     @pytest.fixture
@@ -88,7 +90,7 @@ class TestPurchaseOrderItemSchema:
             "purchase_order_id": 1003,
             "product_id": 503
         }
-        
+
         with pytest.raises(ValidationError) as exc:
             schema.load(incomplete_data)
         errors = exc.value.messages
@@ -109,4 +111,4 @@ class TestPurchaseOrderItemSchema:
         invalid_data["unit_price"] = "twenty"
         with pytest.raises(ValidationError) as exc:
             schema.load(invalid_data)
-        assert "Not a valid number" in str(exc.value) 
+        assert "Not a valid number" in str(exc.value)

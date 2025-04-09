@@ -10,6 +10,7 @@ from app.schemas.enums import (
     Status
 )
 
+
 class TestPurchaseOrderClass:
     @pytest.fixture
     def valid_po_data(self):
@@ -37,6 +38,7 @@ class TestPurchaseOrderClass:
         assert po.payment_terms == PaymentTerms.NET_30.value
         assert po.supplier_id == 501
         assert po.status == Status.PENDING.value
+
 
 class TestPurchaseOrderSchema:
     @pytest.fixture
@@ -70,7 +72,7 @@ class TestPurchaseOrderSchema:
     def test_invalid_payment_terms(self, schema, valid_data):
         invalid_data = valid_data.copy()
         invalid_data["payment_terms"] = "INVALID_TERM"
-        
+
         with pytest.raises(ValidationError) as exc:
             schema.load(invalid_data)
         assert "Invalid payment terms" in str(exc.value)
@@ -78,7 +80,7 @@ class TestPurchaseOrderSchema:
     def test_invalid_status_value(self, schema, valid_data):
         invalid_data = valid_data.copy()
         invalid_data["status"] = "INVALID_STATUS"
-        
+
         with pytest.raises(ValidationError) as exc:
             schema.load(invalid_data)
         assert "Invalid status" in str(exc.value)
@@ -88,7 +90,7 @@ class TestPurchaseOrderSchema:
             "order_date": "2023-01-20",
             "total_amount": 2000.50
         }
-        
+
         with pytest.raises(ValidationError) as exc:
             schema.load(incomplete_data)
         errors = exc.value.messages
@@ -100,7 +102,7 @@ class TestPurchaseOrderSchema:
         # Test invalid ID type
         invalid_data = valid_data.copy()
         invalid_data["supplier_id"] = "invalid_supplier"
-        
+
         with pytest.raises(ValidationError) as exc:
             schema.load(invalid_data)
         assert "Not a valid integer" in str(exc.value)
@@ -108,7 +110,7 @@ class TestPurchaseOrderSchema:
         # Test invalid date format
         invalid_data = valid_data.copy()
         invalid_data["order_date"] = "20-01-2023"
-        
+
         with pytest.raises(ValidationError) as exc:
             schema.load(invalid_data)
         assert "Not a valid date" in str(exc.value)
@@ -116,7 +118,7 @@ class TestPurchaseOrderSchema:
     def test_negative_total_amount(self, schema, valid_data):
         invalid_data = valid_data.copy()
         invalid_data["total_amount"] = -100.00
-        
+
         with pytest.raises(ValidationError) as exc:
             schema.load(invalid_data)
-        assert "greater than or equal to 0" in str(exc.value) 
+        assert "greater than or equal to 0" in str(exc.value)

@@ -10,27 +10,28 @@ from ...schemas.purchase_order import PurchaseOrder
 from ...schemas.purchase_order_item import PurchaseOrderItemSchema
 from ...schemas.supplier import Supplier
 
+
 @bp.route('/order', methods=['POST'])
 def place_order():
     """
-        Places one or more orders based on submitted form data.
+    Places one or more orders based on submitted form data.
 
-        Request Form Data:
-            {
-                "123": {
-                    "unit_price": 15.0,
-                    "quantity": 10
-                },
-                "456": {
-                    "unit_price": 20.0,
-                    "quantity": 5
-            }
-        Returns:
-            Response: A JSON response indicating the success of the order placement:
-            {
-                "message": "Order(s) Placed"
-            }
-            Error: A JSON response with an error message if the operation fails.
+    Request Form Data:
+        {
+            "123": {
+                "unit_price": 15.0,
+                "quantity": 10
+            },
+            "456": {
+                "unit_price": 20.0,
+                "quantity": 5
+        }
+    Returns:
+        Response: A JSON response indicating the success of the order placement:
+        {
+            "message": "Order(s) Placed"
+        }
+        Error: A JSON response with an error message if the operation fails.
     """
     try:
         data = request.form.to_dict()
@@ -49,12 +50,12 @@ def place_order():
         try:
             send_purchase_orders(purchase_orders)
             app.logger.info('Successfully sent all purchase orders to suppliers')
-            
+
             return app.redirect('/order_success')
         except Exception as e:
             app.logger.error(f'Error processing order: {str(e)}')
             return jsonify({'error': str(e)}), 400
-            
+
     except Exception as e:
         app.logger.error(f'Error in place_order: {str(e)}')
         return jsonify({'error': 'Invalid request data'}), 400
@@ -64,7 +65,7 @@ def send_purchase_orders(purchase_orders):
     for purchase_order in purchase_orders:
         supplier = Supplier.query.get(purchase_order.supplier_id)
         supplier_response = supplier.send_purchase_order(purchase_order)
-        
+
         if supplier_response['status'] != Status.RECEIVED.value:
             raise Exception("Supplier did not approve the order")
 
@@ -95,7 +96,7 @@ def create_po_line_items(order_data, suppliers):
         product = Product.get_product_by_id(pid)
         if not product:
             raise Exception(f"Product with ID {pid} not found")
-            
+
         if product.supplier_id not in suppliers:
             suppliers[product.supplier_id] = []
 
@@ -110,14 +111,14 @@ def create_po_line_items(order_data, suppliers):
 
 def transform_order_data(form_data):
     transformed = {}
-    
+
     # Find all unique product IDs
     product_ids = set(
-        key.split('-')[-1] 
-        for key in form_data.keys() 
+        key.split('-')[-1]
+        for key in form_data.keys()
         if key.startswith('product_id-')
     )
-    
+
     # Build structured data
     for pid in product_ids:
         transformed[pid] = {

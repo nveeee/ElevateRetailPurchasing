@@ -5,13 +5,16 @@ from sqlalchemy import asc
 
 from ..database import db
 
+
 def get_products(limit=None):
-    """Get all products from the database with their supplier names"""
+    """ Get all products from the database with their supplier names. """
     products = []
 
     # Query all products with their suppliers, sorted by quantity
-    query = db.session.query(Product).join(Inventory, Product.id == Inventory.product_id).order_by(asc(Inventory.quantity))
-    
+    query = db.session.query(Product).join(
+        Inventory, Product.id == Inventory.product_id
+    ).order_by(asc(Inventory.quantity))
+
     if limit is not None:
         query = query.limit(limit)
 

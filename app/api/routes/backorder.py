@@ -7,6 +7,7 @@ from ...schemas.product import Product
 from ...schemas.purchase_order import PurchaseOrder
 from ...schemas.supplier import Supplier
 
+
 @bp.route('/backorder', methods=['POST'])
 def backorder():
     """
@@ -31,7 +32,6 @@ def backorder():
                 "status": "APPROVED"
             }
         }
-
         Error: A JSON response with an error message if the operation fails.
     """
     try:
@@ -73,4 +73,4 @@ def backorder():
         }), 201
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 500 
+        return jsonify({'error': str(e)}), 500

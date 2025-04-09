@@ -1,9 +1,12 @@
 import click
-from app.seed import seed_all, seed_suppliers, seed_products, seed_purchase_orders, seed_purchase_order_item
+from app.seed import (
+    seed_all, seed_suppliers, seed_products, seed_purchase_orders, seed_purchase_order_item
+)
+
 
 def register_commands(app):
     """Register CLI commands for the application"""
-    
+
     @app.cli.command('seed-db')
     @click.option('--suppliers', default=10, help='Number of suppliers to create')
     @click.option('--products', default=50, help='Number of products to create')
@@ -22,13 +25,13 @@ def register_commands(app):
             from app.schemas.product import Product
             from app.schemas.supplier import Supplier
             from app import db
-            
+
             PurchaseOrderItem.query.delete()
             PurchaseOrder.query.delete()
             Product.query.delete()
             Supplier.query.delete()
             db.session.commit()
-            
+
             seed_suppliers(suppliers)
             seed_products(products)
             seed_purchase_orders(orders)

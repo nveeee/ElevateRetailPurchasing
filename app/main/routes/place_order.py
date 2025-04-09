@@ -2,6 +2,7 @@ from flask import render_template, request, session
 from app.main import bp
 from app.api.util import get_products
 
+
 @bp.route('/place_order')
 def place_order():
     page = request.args.get('page', 1, type=int)
@@ -19,4 +20,3 @@ def place_order():
         current_page=page,
         total_pages=(total // per_page) + (1 if total % per_page else 0)
     )
-

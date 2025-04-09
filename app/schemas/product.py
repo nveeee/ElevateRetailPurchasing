@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, post_load, validates, ValidationError
+from marshmallow import Schema, fields, post_load
 from app.database import db
 
 
@@ -13,7 +13,6 @@ class Product(db.Model):
 
     supplier = db.relationship('Supplier', backref='products')
 
-    
     @classmethod
     def get_supplier_id(cls, product_id):
         try:

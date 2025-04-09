@@ -1,11 +1,11 @@
-from marshmallow import Schema, fields, post_load, validate, ValidationError, validates
-from .enums import PaymentTerms
+from marshmallow import Schema, fields, post_load, validate
 
 from app.database import db
 
+
 class Supplier(db.Model):
     __tablename__ = 'Supplier'
-    
+
     id = db.Column('Supplier_ID', db.Integer, primary_key=True)
     supplier_name = db.Column('Supplier_Name', db.String(100), nullable=False)
     contact_name = db.Column('Contact_Name', db.String(255), nullable=False)

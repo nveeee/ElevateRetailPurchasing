@@ -2,6 +2,7 @@ from flask import render_template, request
 from app.main import bp
 from app.api.util import get_products
 
+
 @bp.route('/po_form', methods=['POST'])
 def po_form():
     # Get IDs from hidden input

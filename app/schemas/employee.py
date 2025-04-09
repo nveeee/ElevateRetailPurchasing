@@ -1,8 +1,6 @@
-from typing import ClassVar
-
 from marshmallow import Schema, fields, post_load, validates, ValidationError
 import bcrypt
-import uuid
+
 
 class Employee:
     def __init__(self, first_name, last_name, email, password: str):
