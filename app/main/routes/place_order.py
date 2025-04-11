@@ -1,6 +1,6 @@
 from flask import render_template, request, session
-from app.main import bp
-from app.api.util import get_products
+from ...main import bp
+from ...api.util import get_products
 
 
 @bp.route('/place_order')

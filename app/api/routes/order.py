@@ -1,7 +1,7 @@
 from datetime import date
 from flask import jsonify, request, current_app as app
 
-from app.schemas.inventory import Inventory
+from ...schemas.inventory import Inventory
 
 from .. import bp
 from ...schemas import Status

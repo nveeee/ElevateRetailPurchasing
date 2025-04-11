@@ -3,15 +3,13 @@ from ..schemas.inventory import Inventory
 
 from sqlalchemy import asc
 
-from ..database import db
-
 
 def get_products(limit=None):
     """ Get all products from the database with their supplier names. """
     products = []
 
     # Query all products with their suppliers, sorted by quantity
-    query = db.session.query(Product).join(
+    query = Product.query.join(
         Inventory, Product.id == Inventory.product_id
     ).order_by(asc(Inventory.quantity))
 

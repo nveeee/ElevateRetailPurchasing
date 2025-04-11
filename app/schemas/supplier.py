@@ -1,6 +1,10 @@
+import os
 from marshmallow import Schema, fields, post_load, validate
 
-from app.database import db
+if (os.getenv('FLASK_ENV') == 'pos'):
+    from database import db
+else:
+    from ..database import db
 
 
 class Supplier(db.Model):

@@ -1,7 +1,12 @@
+import os
 from marshmallow import Schema, fields, post_load, validates, ValidationError
 from .enums import PaymentTerms, Status
-from app.database import db
 from datetime import datetime
+
+if (os.getenv('FLASK_ENV') == 'pos'):
+    from database import db
+else:
+    from ..database import db
 
 from flask import current_app as app
 
