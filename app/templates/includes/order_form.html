@@ -47,5 +47,9 @@
 </form>
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='js/order_form.js') }}"></script>
+{% if env == 'pos' %}
+    <script src="../static/js/order_form.js"></script>
+{% else %}
+    <script src="{{ url_for('static', filename='js/order_form.js') }}"></script>
+{% endif %}
 {% endblock %}

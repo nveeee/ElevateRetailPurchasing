@@ -1,3 +1,4 @@
+import os
 from flask import render_template, request
 from ...main import bp
 from ...api.util import get_products
@@ -20,5 +21,6 @@ def po_form():
     return render_template(
         'po_form.html',
         active_page='place_order',
-        products=selected_products
+        products=selected_products,
+        env=os.getenv('FLASK_ENV')
     )

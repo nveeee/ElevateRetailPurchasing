@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Elevate Retail Purchasing{% endblock %}</title>
+    {% if env == 'pos' %}
+        <link rel="stylesheet" type="text/css" href="../static/css/purchasing_style.css">
+    {% else %}
+        <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+    {% endif %}
     <link rel="stylesheet" type="text/css" href="../static/css/style.css">
     {% block head %}{% endblock %}
     {% block scripts %}{% endblock %}

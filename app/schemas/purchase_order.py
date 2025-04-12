@@ -17,7 +17,7 @@ class PurchaseOrder(db.Model):
     id = db.Column('Purchase_Order_ID', db.Integer, primary_key=True)
     order_date = db.Column('Order_Date', db.Date, nullable=False, default=datetime.utcnow)
     supplier_id = db.Column(db.Integer, db.ForeignKey('Supplier.Supplier_ID'), nullable=False)
-    status = db.Column('Status', db.String(20), nullable=False, default=Status.PENDING.value)
+    status = db.Column('Purchase_Order_Status', db.String(20), nullable=False, default=Status.PENDING.value)
 
     line_items = db.relationship(
         'PurchaseOrderItem', back_populates='purchase_order', cascade='all, delete-orphan'

@@ -1,3 +1,4 @@
+import os
 from flask import render_template, request, session
 from ...main import bp
 from ...api.util import get_products
@@ -18,5 +19,6 @@ def place_order():
         active_page='place_order',
         products=session['current_products'],
         current_page=page,
-        total_pages=(total // per_page) + (1 if total % per_page else 0)
+        total_pages=(total // per_page) + (1 if total % per_page else 0),
+        env=os.getenv('FLASK_ENV')
     )
