@@ -1,4 +1,6 @@
 <form method="POST" action="{{ url_for('api.place_order') }}">
+    {{ form.hidden_tag() }}
+    
     {% for product in products %}
     <div class="product-order-group">
         <h3>{{ product.product_name }}</h3>

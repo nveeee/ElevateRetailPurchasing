@@ -1,4 +1,6 @@
 <form method="POST" action="{{ url_for('main.po_form') }}">
+    {{ form.hidden_tag() }}
+    
     <div class="table-container">
         <table class="alerts-table">
             <thead>
@@ -15,7 +17,7 @@
                 <tr>
                     <td>
                         <input type="checkbox" 
-                               data-name="selected_products" 
+                               name="selected_products[]"
                                value="{{ product.product_id }}"
                                class="product-checkbox">
                     </td>
@@ -30,9 +32,8 @@
     </div>
     
     <div class="bulk-actions">
-        <button type="submit" class="order-button" id="order-button">
-            Order Selected Products (<span id="selected-count">0</span>)
-        </button>
+        {{ form.submit(class_="order-button", id="order-button") }}
+        (<span id="selected-count">0</span>)
     </div>
 
     <div class="pagination">

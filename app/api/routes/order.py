@@ -51,7 +51,7 @@ def place_order():
             send_purchase_orders(purchase_orders)
             app.logger.info('Successfully sent all purchase orders to suppliers')
 
-            return app.redirect('/order_success')
+            return app.redirect('/purchasing/order_success')
         except Exception as e:
             app.logger.error(f'Error processing order: {str(e)}')
             return jsonify({'error': str(e)}), 400
