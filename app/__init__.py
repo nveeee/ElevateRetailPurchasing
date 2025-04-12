@@ -37,10 +37,10 @@ def create_app(config_class=None):
 
     # Register front-end blueprint
     from .main import bp as main_bp
-    app.register_blueprint(main_bp)
+    app.register_blueprint(main_bp, url_prefix='/purchasing')
 
     from .api import bp as api_bp
-    app.register_blueprint(api_bp, url_prefix='/api')
+    app.register_blueprint(api_bp, url_prefix='/purchasing/api')
 
     # Register CLI commands
     from .cli import register_commands
