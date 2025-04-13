@@ -46,8 +46,4 @@ def create_app(config_class=None):
     from .cli import register_commands
     register_commands(app)
 
-    # Create database tables
-    with app.app_context():
-        db.create_all()
-
     return app
