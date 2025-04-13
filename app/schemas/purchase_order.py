@@ -4,7 +4,7 @@ from .enums import PaymentTerms, Status
 from datetime import datetime
 
 if (os.getenv('FLASK_ENV') == 'pos'):
-    from database import db
+    from src.utils.db_utils import db
 else:
     from ..database import db
 

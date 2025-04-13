@@ -2,7 +2,7 @@ import os
 from marshmallow import Schema, fields, post_load, validates, ValidationError
 
 if (os.getenv('FLASK_ENV') == 'pos'):
-    from database import db
+    from src.utils.db_utils import db
 else:
     from ..database import db
 
