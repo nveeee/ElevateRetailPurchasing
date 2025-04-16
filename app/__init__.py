@@ -46,4 +46,24 @@ def create_app(config_class=None):
     from .cli import register_commands
     register_commands(app)
 
+    # Standalone Database Mode
+    if not os.getenv('FLASK_ENV') or os.getenv('FLASK_ENV') == 'pos':
+        with app.app_context():
+            db.create_all()
+
+            from sqlalchemy import text
+
+            sql_file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'db', 'Elevate_Insert.sql'))
+
+            with open(sql_file_path, 'r') as file:
+                sql_statements = file.read()
+
+            for statement in sql_statements.strip().split(';'):
+                if statement.strip():
+                    try:
+                        db.session.execute(text(statement))
+                    except Exception as e:
+                        app.logger.error(f"Failed to execute statement: {statement}\nError: {e}")
+            db.session.commit()
+
     return app
