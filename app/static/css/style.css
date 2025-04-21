@@ -13,7 +13,7 @@ body {
 /* Sidebar */
 .sidebar {
   width: 250px;
-  background: lightgreen;
+  background: #B5C8B8;
   padding: 1rem;
   position: fixed;
   height: 100vh;
@@ -69,8 +69,12 @@ nav a:hover {
 }
 
 nav a[active] {
-  background-color: #90ee90;
-  color: #000;
+  background-color: #ffffff;
+  color: #20c997;
+  font-weight: bold;
+  box-shadow: 0 0 15px #20c997;
+  border: 2px solid #20c997;
+  border-radius: 6px;
 }
 
 /* Card Layout */
