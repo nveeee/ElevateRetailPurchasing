@@ -1,5 +1,11 @@
+from flask import request, jsonify
+from app.api import bp
+from app.schemas.product import Product
+from .. import bp
+
+
 # New routes for products
-bp.route('/products', methods=['GET'])
+bp.route("/products", methods=['GET'])
 def list_products():
     """List all products or get product by id"""
     product_id = request.args.get('product_id')
