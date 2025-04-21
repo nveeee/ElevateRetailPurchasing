@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Stages</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .order-container {
+            margin-top: 20px;
+        }
+        .order {
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .order h3 {
+            margin: 0 0 10px;
+        }
+        .order p {
+            margin: 0 0 10px;
+        }
+        .home-link {
+            margin-bottom: 10px;
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 3px;
+        }
+        .home-link:hover {
+            background-color: #0056b3;
+        }
+        form {
+            margin-top: 10px;
+        }
+        select, button {
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Order Status</h1>
+    <!-- Home Button -->
+    <a href="/purchasing" class="home-link">Home</a>
+
+
+    {% if message %}
+        <p>{{ message }}</p>
+    {% elif orders %}
+        <div class="order-container">
+            {% for order in orders %}
+                <div class="order">
+                    <h3>Order #{{ order.id }}</h3>
+                    <p>Status: {{ order.status }}</p>
+                    <form action="{{ url_for('main.update_order_status', order_id=order.id) }}" method="POST">
+                        <label for="status">Change Status:</label>
+                        <select name="status" id="status">
+                            <option value="Processing" {% if order.status == 'Processing' %}selected{% endif %}>Processing</option>
+                            <option value="Shipped" {% if order.status == 'Shipped' %}selected{% endif %}>Shipped</option>
+                            <option value="Delivered" {% if order.status == 'Delivered' %}selected{% endif %}>Delivered</option>
+                        </select>
+                        <button type="submit">Update</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+</body>
+</html>
