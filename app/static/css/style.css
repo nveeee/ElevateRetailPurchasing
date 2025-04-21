@@ -344,3 +344,55 @@ nav a[active] {
   margin-left: 1rem;
   font-weight: 600;
 }
+
+.order-table-container {
+  margin-top: 2rem;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  overflow-x: auto;
+}
+
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.order-table th, .order-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #ccc;
+}
+
+.order-table th {
+  background-color: #f0f0f0;
+}
+
+.status {
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  font-weight: bold;
+  display: inline-block;
+  text-transform: capitalize;
+}
+
+.status.pending {
+  background-color: #ffe58a;
+  color: #8a6d00;
+}
+
+.status.received {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status.shipped {
+  background-color: #cce5ff;
+  color: #004085;
+}
+
+.status.canceled {
+  background-color: #f8d7da;
+  color: #721c24;
+}
