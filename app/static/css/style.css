@@ -396,3 +396,95 @@ nav a[active] {
   background-color: #f8d7da;
   color: #721c24;
 }
+
+ /* ====== Order Stages Styling (Mirroring Place Order) ====== */
+
+.order-stages-container {
+  background-color: #2c2c2c;
+  padding: 1.5rem;
+  border-radius: 8px;
+  color: white;
+}
+
+.order-stages-title {
+  font-size: 1.75rem;
+  color: white;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* Table Styles */
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  color: #000;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.order-table th {
+  background: #f8f9fa;
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.order-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.order-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Form Elements Inside Table */
+.order-table select {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.order-table button {
+  background-color: #20c997;
+  color: white;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.order-table button:hover {
+  background-color: #1aa179;
+}
+
+/* Pagination Buttons */
+.pagination {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.pagination a {
+  background-color: #20c997; /* Green buttons */
+  color: white;
+  padding: 0.5rem 1rem;
+  margin: 0 5px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.pagination a:hover {
+  background-color: #198f73;
+}
+
+.pagination span {
+  color: white;
+  margin: 0 10px;
+  font-weight: bold;
+}

@@ -1,80 +1,66 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Order Stages</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        h1 {
-            color: #333;
-        }
-        .order-container {
-            margin-top: 20px;
-        }
-        .order {
-            background-color: #f9f9f9;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        .order h3 {
-            margin: 0 0 10px;
-        }
-        .order p {
-            margin: 0 0 10px;
-        }
-        .home-link {
-            margin-bottom: 10px;
-            display: inline-block;
-            padding: 5px 10px;
-            background-color: #007bff;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 3px;
-        }
-        .home-link:hover {
-            background-color: #0056b3;
-        }
-        form {
-            margin-top: 10px;
-        }
-        select, button {
-            padding: 5px 10px;
-        }
-    </style>
-</head>
-<body>
+{% extends 'purchasing_base.html' %}
 
-    <h1>Order Status</h1>
-    <!-- Home Button -->
-    <a href="/purchasing" class="home-link">Home</a>
+{% block title %}Order Stages - {{ super() }}{% endblock %}
 
+{% block content %}
+<main>
+    <h2 class="section-title">Order Stages</h2>
 
     {% if message %}
         <p>{{ message }}</p>
-    {% elif orders %}
-        <div class="order-container">
-            {% for order in orders %}
-                <div class="order">
-                    <h3>Order #{{ order.id }}</h3>
-                    <p>Status: {{ order.status }}</p>
-                    <form action="{{ url_for('main.update_order_status', order_id=order.id) }}" method="POST">
-                        <label for="status">Change Status:</label>
-                        <select name="status" id="status">
-                            <option value="Processing" {% if order.status == 'Processing' %}selected{% endif %}>Processing</option>
-                            <option value="Shipped" {% if order.status == 'Shipped' %}selected{% endif %}>Shipped</option>
-                            <option value="Delivered" {% if order.status == 'Delivered' %}selected{% endif %}>Delivered</option>
-                        </select>
-                        <button type="submit">Update</button>
-                    </form>
-                </div>
-            {% endfor %}
-        </div>
     {% endif %}
 
-</body>
-</html>
+    {% if orders %}
+    <div class="order-table-container">
+        <table class="order-table">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Status</th>
+                    <th>Update Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    <td>
+                        <span class="status {{ order.status }}">{{ order.status }}</span>
+                    </td>
+                    <td>
+                        <form action="{{ url_for('main.update_order_status', order_id=order.id) }}" method="post">
+                            <select name="status">
+                                <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Pending</option>
+                                <option value="processing" {% if order.status == 'processing' %}selected{% endif %}>Processing</option>
+                                <option value="shipped" {% if order.status == 'shipped' %}selected{% endif %}>Shipped</option>
+                                <option value="delivered" {% if order.status == 'delivered' %}selected{% endif %}>Delivered</option>
+                            </select>
+                            <button type="submit" class="order-button">Update</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        {% if current_page > 1 %}
+            <a class="order-button" href="{{ url_for('main.order_stages', page=current_page - 1) }}">Previous</a>
+        {% endif %}
+        <span class="order-amount">Page {{ current_page }}</span>
+        {% if current_page < total_pages %}
+            <a class="order-button" href="{{ url_for('main.order_stages', page=current_page + 1) }}">Next</a>
+        {% endif %}
+    </div>
+    {% else %}
+        <p>No orders available.</p>
+    {% endif %}
+</main>
+{% endblock %}
+
+{% block head %}
+{{ super() }}
+
+{% endblock %}
