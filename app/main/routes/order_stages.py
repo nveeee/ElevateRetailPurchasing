@@ -11,7 +11,7 @@ def order_stages():
     per_page = 10
 
     #orders using Flask-SQLAlchemy
-    orders_query = PurchaseOrder.query.paginate(page=page, per_page=per_page, error_out=False)
+    orders_query = PurchaseOrder.query.order_by(PurchaseOrder.id).paginate(page=page, per_page=per_page, error_out=False)
     orders = orders_query.items
     total_pages = orders_query.pages
 
