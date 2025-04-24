@@ -378,22 +378,22 @@ nav a[active] {
   text-transform: capitalize;
 }
 
-.status.pending {
+.status.pending, .status.Pending {
   background-color: #ffe58a;
   color: #8a6d00;
 }
 
-.status.received {
+.status.received, .status.Received {
   background-color: #d4edda;
   color: #155724;
 }
 
-.status.shipped {
+.status.shipped, .status.Shipped {
   background-color: #cce5ff;
   color: #004085;
 }
 
-.status.canceled {
+.status.canceled, .status.Cancelled {
   background-color: #f8d7da;
   color: #721c24;
 }
