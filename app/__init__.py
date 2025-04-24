@@ -1,6 +1,6 @@
 import os
 import logging
-from flask import Flask, redirect, session
+from flask import Flask, redirect, session, render_template
 from dotenv import load_dotenv
 from .database import db
 
@@ -45,32 +45,13 @@ def create_app(config_class=None):
     #  Redirect root URL to login
     @app.route('/')
     def redirect_to_login():
-        return redirect('/login')
-
-    #  Login page route
-    @app.route('/login')
-    def login():
-        return '''
-        <section style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #2c2c2c; color: white; font-family: Arial, sans-serif;">
-            <div style="text-align: center; padding: 40px; background: #3a3a3a; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
-                <img src="/static/images/elevate_retail_logo.jpg" alt="Logo" style="width: 200px; margin-bottom: 20px;" />
-                <h2>Welcome to Elevate Retail</h2>
-                <p>Please log in to continue</p>
-                <a href="/purchasing" 
-                   style="display: inline-block; margin-top: 20px; padding: 12px 24px; background-color: #B5C8B8; color: white; font-size: 1.2rem; border-radius: 6px; text-decoration: none; transition: background-color 0.3s ease;"
-                   onmouseover="this.style.backgroundColor='#28a745';"
-                   onmouseout="this.style.backgroundColor='#B5C8B8';">
-                   Log In
-                </a>
-            </div>
-        </section>
-        '''
+        return redirect('/purchasing/login')
 
     #  Logout route to clear session and redirect to login
     @app.route('/logout')
     def logout():
         session.clear()  # Clears the session to log out the user
-        return redirect('/login')  # Redirect to the login page
+        return redirect('/purchasing/login')  # Redirect to the login page
 
     # Standalone Database Mode
     if not os.getenv('FLASK_ENV') or os.getenv('FLASK_ENV') == 'pos':
