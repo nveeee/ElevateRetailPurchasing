@@ -128,17 +128,17 @@ nav a[active] {
 
 /* New card color classes */
 .card.blue {
-  background-color: lightblue; /* Light blue for some cards */
+  background-color: lightblue; /* Light blue   */
   color: black;
 }
 
 .card.green {
-  background-color: lightgreen; /* Light green for some cards */
+  background-color: lightgreen; /*Light green  */
   color: black;
 }
 
 .card.grey {
-  background-color: lightgrey; /* Light grey for some cards */
+  background-color: lightgrey; /* Light grey  */
   color: black;
 }
 
@@ -325,7 +325,7 @@ nav a[active] {
 
 /* Order Button & Amount */
 .order-button {
-  background: #007bff;
+  background: #B5C8B8;
   color: white;
   padding: 1rem 2rem;
   font-size: 1.25rem;
@@ -397,7 +397,7 @@ nav a[active] {
   color: #721c24;
 }
 
- /* ====== Order Stages Styling (Mirroring Place Order) ====== */
+ /*Order Stages Styling   */
 
 .order-stages-container {
   background-color: #2c2c2c;
@@ -448,7 +448,7 @@ nav a[active] {
 }
 
 .order-table button {
-  background-color: #20c997;
+  background-color: #B5C8B8;
   color: white;
   padding: 0.5rem 1rem;
   font-weight: bold;
@@ -469,7 +469,7 @@ nav a[active] {
 }
 
 .pagination a {
-  background-color: #20c997; /* Green buttons */
+  background-color:#B5C8B8; /* buttons */
   color: white;
   padding: 0.5rem 1rem;
   margin: 0 5px;
