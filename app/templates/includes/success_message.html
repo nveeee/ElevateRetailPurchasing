@@ -1,5 +1,26 @@
-<section style="text-align: center; padding: 50px;">
-      <h2>🎉 Order Placed Successfully!</h2>
-      <p>Thank you for your purchase.</p>
-      <a href="/purchasing" class="btn">Return to Home</a>
+<section style="text-align: center; padding: 100px 20px; min-height: 400px; overflow: hidden; position: relative;">
+
+  <!-- background logo -->
+  <img src="../static/images/elevate_retail_logo.jpg" alt="Elevate Retail Logo"
+       style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+              width: 120%; height: 120%; object-fit: contain; opacity: 0.05; pointer-events: none;">
+
+  <!-- Text  -->
+  <div style="position: relative;">
+    <h2>🎉 Order Placed Successfully!</h2>
+    <p>Thank you for your purchase.</p>
+
+    <a href="/purchasing"
+       style="display: inline-block; padding: 12px 24px; background-color: #B5C8B8;
+              color: white; font-size: 1.25rem; border-radius: 6px; text-decoration: none;
+              transition: background-color 0.3s ease; margin-top: 30px;">
+      Return to Home
+    </a>
+  </div>
+
+  <style>
+    a:hover {
+      background-color: #28a745 !important; /* Green on hover */
+    }
+  </style>
 </section>
