@@ -16,6 +16,7 @@
             <thead>
                 <tr>
                     <th>Order ID</th>
+                    <th>Supplier</th>  <!-- Added Supplier column -->
                     <th>Status</th>
                     <th>Update Status</th>
                 </tr>
@@ -24,6 +25,7 @@
                 {% for order in orders %}
                 <tr>
                     <td>{{ order.id }}</td>
+                    <td>{{ order.supplier.supplier_name }}</td>  <!-- Displaying supplier name -->
                     <td>
                         <span class="status {{ order.status }}">{{ order.status }}</span>
                     </td>
@@ -62,5 +64,4 @@
 
 {% block head %}
 {{ super() }}
-
 {% endblock %}
